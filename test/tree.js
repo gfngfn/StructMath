@@ -5,15 +5,20 @@
     this.children = chdrn;
   }
 
-  function tree2boxed(tr) {
+  function tree2boxed(tr, depth, cursorin) {
     var s;
 
   	s = "<div class=\"treedbox\">" + tr.value;
+    if (cursorin && depth == cursor_depth) { s = s + "<span class=\"cursor\">[</span>"; }
     if (tr.children) {
     	for (var i = 0; i < tr.children.length; i++) {
-        s = s + tree2boxed(tr.children[i]);
+        s = s + "<span class=\"mini\">(";
+        for(var j = 0; j < depth; j++) { s = s + "*"; }
+        s = s + "" + i + ")</span>";
+        s = s + tree2boxed(tr.children[i], depth + 1, cursorin && (cursor[depth] == i));
       }
     }
+    if (cursorin && depth == cursor_depth) { s = s + "<span class=\"cursor\">]</span>"; }
     s = s + "</div>";
 
     return s;
@@ -35,3 +40,6 @@
         new tree_node("q", [])
       ])
     ]);
+
+  var cursor = [1, 0];
+  var cursor_depth = 1;

@@ -19,6 +19,13 @@ function react_to_input(e) {
   document.getElementById("displayed").innerHTML = string_to_html();
 }
 
+function insert_char(ch, n) {
+  displayedstring = displayedstring.substr(0, n) + ch + displayedstring.substr(n, displayedstring.length);
+}
+
+function delete_char(n) {
+  displayedstring = displayedstring.substr(0, n) + displayedstring.substr(n + 1, displayedstring.length);
+}
 
 function deal_with_key(e) {
   var kcode;
@@ -33,23 +40,23 @@ function deal_with_key(e) {
 
   if (kcode == KEYCODE_BACKSPACE && cursorpos > 0) {
     // backspace
-    displayedstring = displayedstring.substr(0, cursorpos - 1) + displayedstring.substr(cursorpos, len);
+    delete_char(cursorpos - 1);
     cursorpos -= 1;
 
   } else if (kcode == KEYCODE_DELETE && cursorpos < len) {
     // delete
-    displayedstring = displayedstring.substr(0, cursorpos) + displayedstring.substr(cursorpos + 1, len);
+    delete_char(cursorpos);
 
   } else if (kcode == KEYCODE_SPACE || is_numeric_code(kcode)) {
     // numeric
     ch = String.fromCharCode(kcode);
-    displayedstring = displayedstring.substr(0, cursorpos) + ch + displayedstring.substr(cursorpos, len);
+    insert_char(ch, cursorpos);
     cursorpos += 1;
 
   } else if (is_latin_code(kcode)) {
     // latin
     ch = String.fromCharCode(kcode + (kshift ? 0 : 32));
-    displayedstring = displayedstring.substr(0, cursorpos) + ch + displayedstring.substr(cursorpos, len);
+    insert_char(ch, cursorpos);
     cursorpos += 1;
 
   } else if (kcode == KEYCODE_LEFT && cursorpos > 0) {
@@ -58,6 +65,49 @@ function deal_with_key(e) {
 
   } else if (kcode == KEYCODE_RIGHT && cursorpos < len) {
     // right
+    cursorpos += 1;
+  } else {
+    switch (kcode) {
+      case 186: //[: *]
+        insert_char((kshift ? "*" : ":"), cursorpos);
+        break;
+      case 187: //[; +]
+        insert_char((kshift ? "+" : ";"), cursorpos);
+        break;
+      case 188: //[, <]
+        insert_char((kshift ? "<" : ","), cursorpos);
+        break;
+      case 189: //[- =]
+        insert_char((kshift ? "=" : "-"), cursorpos);
+        break;
+      case 190: //[. >]
+        insert_char((kshift ? ">" : "."), cursorpos);
+        break;
+      case 191: //[/ ?]
+        insert_char((kshift ? "?" : "/"), cursorpos);
+        break;
+      case 192: //[@ `]
+        insert_char((kshift ? "`" : "@"), cursorpos);
+        break;
+      case 219: //[[ {]
+        insert_char((kshift ? "{" : "["), cursorpos);
+        break;
+      case 220: //[\ |]
+        insert_char((kshift ? "|" : "\\"), cursorpos);
+        break;
+      case 221: //[] }]
+        insert_char((kshift ? "}" : "]"), cursorpos);
+        break;
+      case 222: //[^ ~]
+        insert_char((kshift ? "~" : "^"), cursorpos);
+        break;
+      case 226: //[\ _]
+        insert_char((kshift ? "_" : "\\"), cursorpos);
+        break;
+      default:
+        cursorpos -= 1;
+        break;
+    }
     cursorpos += 1;
   }
 }
