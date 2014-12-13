@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+body {
+  font-size: 30pt;
+  font-family: "Times New Roman", serif;
+  font-style: italic;
+}
+
+.treedbox {
+	display: inline-block;
+  color: #111111;
+  font-size: 100%;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 4pt;
+  padding-right: 4pt;
+  background-color: #ccccff;
+  border-width: 1pt;
+  border-color: #8888ff;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
