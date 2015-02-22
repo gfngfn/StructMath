@@ -1,15 +1,25 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 
-body {
-  font-size: 30pt;
-  font-family: "Times New Roman", serif;
-  font-style: italic;
+.root-box {
+  padding-top: 8pt;
+  padding-bottom: 8pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  background-color: #eeeeee;
+  border-width: 1pt;
+  border-color: #111111;
+  border-style: dotted;
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.treedbox {
+.box-of-tree {
 	display: inline-block;
   color: #111111;
   font-size: 100%;
+  font-style: italic;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 4pt;
