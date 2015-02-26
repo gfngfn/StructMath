@@ -1,6 +1,6 @@
 ///<reference path="token.ts" />
 
-enum Type { Empty, Ord, Un, Bin, LR, Op }
+enum Type { Empty, Ord, Un, Bin, LR, Op, Rel }
 
 class Tree {
   token_type: Type;
@@ -44,14 +44,12 @@ class Tree {
           res += content_to_string(this.content);
           break;
         case Type.Un:
-          res = content_to_string(this.content);
-          res += this.items[0].tree_to_innerhtml(mt);
-          break;
         case Type.Op:
-          res = content_to_string(this.content);
+          res += content_to_string(this.content);
           res += this.items[0].tree_to_innerhtml(mt);
           break;
         case Type.Bin:
+        case Type.Rel:
           res += this.items[0].tree_to_innerhtml(mt);
           res += content_to_string(this.content);
           res += this.items[1].tree_to_innerhtml(mt);
@@ -113,16 +111,34 @@ class MainTree extends Tree {
   send(ti: TokenInfo): void {
     var lc: Tree;
     var rc: Tree;
+    var rcc: Tree;
 
     if (this.target.token_type == Type.Empty) {
+      // when target is Empty
 
       switch (ti.token_type) {
         case Type.Ord:
           this.target.token_type = Type.Ord;
           this.target.content = ti.content;
           break;
+        case Type.Un:
+          this.target.token_type = Type.Un;
+          this.target.content = ti.content;
+          lc = new Tree(Type.Empty, null);
+          this.target.add_child(lc);
+          this.target = lc;
+          break;
         case Type.Bin:
           this.target.token_type = Type.Bin;
+          this.target.content = ti.content;
+          lc = new Tree(Type.Empty, null);
+          rc = new Tree(Type.Empty, null);
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = lc;
+          break;
+        case Type.Rel:
+          this.target.token_type = Type.Rel;
           this.target.content = ti.content;
           lc = new Tree(Type.Empty, null);
           rc = new Tree(Type.Empty, null);
@@ -147,7 +163,29 @@ class MainTree extends Tree {
           this.target.add_child(lc);
           this.target.add_child(rc);
           break;
+        case Type.Un:
+          lc = new Tree(Type.Empty, null).copy(this.target);
+          rc = new Tree(Type.Un, ti.content);
+          rcc = new Tree(Type.Empty, null);
+          rc.add_child(rcc);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = "~concat";
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = rcc;
+          break;
         case Type.Bin:
+          lc = new Tree(Type.Empty, null).copy(this.target);
+          rc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = rc;
+          break;
+        case Type.Rel:
           lc = new Tree(Type.Empty, null).copy(this.target);
           rc = new Tree(Type.Empty, null);
           this.target.delete_to_empty();
@@ -160,7 +198,6 @@ class MainTree extends Tree {
         default:
           break;
       }
-      console.log("[GFN] non-Empty target.");//<<test>>
     }
   }
 }

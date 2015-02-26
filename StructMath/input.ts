@@ -12,7 +12,19 @@ class UserInput {
   }
 }
 
-enum KeyCategory { BackSpace, Delete, Left, Right, Space, Enter, SequencePrefix, Letter, Invalid }
+enum KeyCategory {
+  BackSpace,
+  Delete,
+  Left,
+  LeftJump,
+  Right,
+  RightJump,
+  Space,
+  Enter,
+  SequencePrefix,
+  Letter,
+  Invalid
+}
 
 class KeyInfo {
   category: KeyCategory;
@@ -41,7 +53,10 @@ var token_info: TokenInfo = new TokenInfo();
 
 function react_to_input(e: KeyboardEvent): void {
   var key_info: KeyInfo;
-  var lc: Tree;
+  var temp_tree: Tree;
+
+  //disable default reaction by browsers
+  e.preventDefault();
 
   key_info = keycode_to_key_info(e);
 
@@ -71,24 +86,46 @@ function react_to_input(e: KeyboardEvent): void {
           main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
         }
         break;
-      case KeyCategory.Right:
-        // move to the right sibling
-        if (main_tree.target.right_sibling != null) {
-          main_tree.target = main_tree.target.right_sibling;
+      case KeyCategory.Left:
+        // move target to left
+        if (!main_tree.target.is_leaf()) {
+          main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
         } else {
-          if (main_tree.target != main_tree) {
+          temp_tree = main_tree.target;
+          while (true) {
+            if (temp_tree.left_sibling != null) {
+              main_tree.target = temp_tree.left_sibling;
+              break;
+            }
+            if (temp_tree.parent == null) {
+              break;
+            }
+            temp_tree = temp_tree.parent;
+          }
+        }
+        break;
+      case KeyCategory.LeftJump:
+        if (main_tree.target.left_sibling != null) {
+          main_tree.target = main_tree.target.left_sibling;
+        }
+        break;
+      case KeyCategory.Right:
+        // move target to right
+        if (main_tree.target.right_sibling != null) {
+          temp_tree = main_tree.target.right_sibling;
+          while (! temp_tree.is_leaf()) {
+            temp_tree = temp_tree.items[0];
+          }
+          main_tree.target = temp_tree;
+        } else {
+          if (main_tree.target.parent != null) {
             main_tree.target = main_tree.target.parent;
           }
         }
         break;
-      case KeyCategory.Left:
-        // move to the left sibling
-        if (main_tree.target.left_sibling != null) {
-          main_tree.target = main_tree.target.left_sibling;
-        } else {
-          if (! main_tree.target.is_leaf()) {
-            main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
-          }
+      case KeyCategory.RightJump:
+        if (main_tree.target.right_sibling != null) {
+          main_tree.target = main_tree.target.right_sibling;
         }
         break;
       case KeyCategory.BackSpace:
@@ -168,10 +205,10 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
         cat = KeyCategory.Delete;
         break;
       case KEYCODE_LEFT:
-        cat = KeyCategory.Left;
+        cat = (kshift ? KeyCategory.LeftJump : KeyCategory.Left);
         break;
       case KEYCODE_RIGHT:
-        cat = KeyCategory.Right;
+        cat = (kshift ? KeyCategory.RightJump : KeyCategory.Right);
         break;
       case KEYCODE_SPACE:
         cat = KeyCategory.Space;

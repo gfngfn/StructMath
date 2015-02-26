@@ -37,6 +37,34 @@ class TokenInfo {
     "x": "x",
     "y": "y",
     "z": "z",
+
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E",
+    "F": "F",
+    "G": "G",
+    "H": "H",
+    "I": "I",
+    "J": "J",
+    "K": "K",
+    "L": "L",
+    "M": "M",
+    "N": "N",
+    "O": "O",
+    "P": "P",
+    "Q": "Q",
+    "R": "R",
+    "S": "S",
+    "T": "T",
+    "U": "U",
+    "V": "V",
+    "W": "W",
+    "X": "X",
+    "Y": "Y",
+    "Z": "Z",
+
     "\\alpha": "α",
     "\\beta": "β",
     "\\gamma": "γ",
@@ -60,7 +88,21 @@ class TokenInfo {
     "\\phi": "φ",
     "\\chi": "χ",
     "\\psi": "ψ",
-    "\\omega": "ω"
+    "\\omega": "ω",
+
+    "\\Gamma": "Γ",
+    "\\Delta": "Δ",
+    "\\Theta": "Θ",
+    "\\Lambda": "Λ",
+    "\\Xi": "Ξ",
+    "\\Pi": "Π",
+    "\\Sigma": "Σ",
+    "\\Upsilon": "Υ",
+    "\\Phi": "Φ",
+    "\\Psi": "Ψ",
+    "\\Omega": "Ω",
+
+    "\\ell": "ℓ"
   }
 
   static ord_other_to_string: { [key: string]: string } = {
@@ -75,41 +117,76 @@ class TokenInfo {
     "9": "9",
     "0": "0",
     "\\bot": "⊥",
-    "\\emptyset": "∅"
+    "\\emptyset": "∅",
+    "\\infty": "∞"
   }
 
-  static bin_to_string: { [key: string]: string } = {
+  static un_to_string: { [key: string]: string } = {
+    "\\+": "＋",
+    "\\-": "－",
+    "\\Im": "ℑ",
+    "\\lnot": "￢",
+    "\\nabla": "∇",
+    "\\Re": "ℜ",
+    "\\unmodels": "⊧",
+    "\\unmp": "∓",
+    "\\unpm": "±",
+    "\\unvdash": "⊢",
+  }
+
+  static bin_assoc_to_string: { [key: string]: string } = {
     "+": "＋",
-    "-": "－",
     "~concat": "\ufeff", // "" is not good for if
     "\\cap": "∩",
     "\\cup": "∪",
-    "\\div": "÷",
     "\\oplus": "⊕",
-    "\\pm": "±",
+    "\\otimes": "⊗",
     "\\times": "×"
   }
-/*
-  private static rel_to_letter: { [key: string]: string } = {
+
+  static bin_other_to_string: { [key: string]: string } = {
+    "-": "－",
+    "/": "/",
+    "\\div": "÷",
+    "\\pm": "±",
+    "\\mp": "∓",
+    "\\setminus": "∖"
+  }
+
+  static rel_to_string: { [key: string]: string } = {
     "=": "＝",
     "<": "＜",
     ">": "＞",
+    "\\approx": "≈",
+    "\\dashv": "⊣",
     "\\equiv": "≡",
+    "\\geq": "≥",
+    "\\gg": "≫",
     "\\in": "∈",
     "\\land": "∧",
     "\\leftarrow": "←",
+    "\\leq": "≤",
+    "\\ll": "≪",
     "\\lor": "∨",
+    "\\mapsto": "↦",
+    "\\models": "⊧",
     "\\ni": "∋",
     "\\perp": "⊥",
+    "\\prec": "≺",
+    "\\propto": "∝",
     "\\rightarrow": "→",
     "\\Rightarrow": "⇒",
-    "\\sim": "∽",
+    "\\sim": "∼",
+    "\\simeq": "≃",
     "\\subset": "⊂",
     "\\subseteq": "⊆",
+    "\\succ": "≻",
     "\\supset": "⊃",
-    "\\supseteq": "⊇"
+    "\\supseteq": "⊇",
+    "\\varsim": "∽",
+    "\\vdash": "⊢",
   }
-*/
+
 
   make_token_info(tok: string) {
     if (TokenInfo.ord_letter_to_string[tok]) {
@@ -118,8 +195,17 @@ class TokenInfo {
     } else if (TokenInfo.ord_other_to_string[tok]) {
       this.token_type = Type.Ord;
       this.content = tok;
-    } else if (TokenInfo.bin_to_string[tok]) {
+    } else if (TokenInfo.un_to_string[tok]) {
+      this.token_type = Type.Un;
+      this.content = tok;
+    } else if (TokenInfo.bin_assoc_to_string[tok]) {
       this.token_type = Type.Bin;
+      this.content = tok;
+    } else if (TokenInfo.bin_other_to_string[tok]) {
+      this.token_type = Type.Bin;
+      this.content = tok;
+    } else if (TokenInfo.rel_to_string[tok]) {
+      this.token_type = Type.Rel;
       this.content = tok;
     } else {
       console.log("[GFN]: '" + tok + "' does not match any def.");//<<test>>
@@ -135,8 +221,14 @@ function content_to_string(tok: string): string {
     return "<span class='math_italic'>" + TokenInfo.ord_letter_to_string[tok] + "</span>";
   } else if (TokenInfo.ord_other_to_string[tok]) {
     return TokenInfo.ord_other_to_string[tok];
-  } else if (TokenInfo.bin_to_string[tok]) {
-    return TokenInfo.bin_to_string[tok];
+  } else if (TokenInfo.un_to_string[tok]) {
+    return TokenInfo.un_to_string[tok];
+  } else if (TokenInfo.bin_assoc_to_string[tok]) {
+    return TokenInfo.bin_assoc_to_string[tok];
+  } else if (TokenInfo.bin_other_to_string[tok]) {
+    return TokenInfo.bin_other_to_string[tok];
+  } else if (TokenInfo.rel_to_string[tok]) {
+    return " " + TokenInfo.rel_to_string[tok] + " ";
   } else {
     console.log("[GFN]: '" + tok + "' does not match any def.");//<<test>>
     return "";
