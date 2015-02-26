@@ -25,6 +25,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="input.ts" />
+    <TypeScriptCompile Include="token.ts" />
     <TypeScriptCompile Include="tree.ts" />
   </ItemGroup>
   <ItemGroup>

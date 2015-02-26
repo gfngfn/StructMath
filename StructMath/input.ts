@@ -1,4 +1,6 @@
-﻿enum InputState { Single, Sequence }
+﻿///<reference path="token.ts" />
+
+enum InputState { Single, Sequence }
 
 class UserInput {
   stock: string;
@@ -35,6 +37,7 @@ var KEYCODE_DELETE = 46;
 var KEYCODE_ENTER = 13;
 
 var user_input: UserInput = new UserInput();
+var token_info: TokenInfo = new TokenInfo();
 
 function react_to_input(e: KeyboardEvent): void {
   var key_info: KeyInfo;
@@ -42,6 +45,7 @@ function react_to_input(e: KeyboardEvent): void {
   key_info = keycode_to_key_info(e);
 
   if (user_input.state == InputState.Single) {
+ 
     switch (key_info.category) {
       case KeyCategory.SequencePrefix:
         user_input.stock = key_info.content;
@@ -49,35 +53,82 @@ function react_to_input(e: KeyboardEvent): void {
         console.log("SequencePrefix: " + key_info.content);//<<test>>
         break;
       case KeyCategory.Letter:
-        /* deal with letter */
-        // main_tree.send(key_info.content);
+        // deal with letter
+        token_info.make_token_info(key_info.content);
+        main_tree.send(token_info);
         console.log(key_info.content);//<<test>>
         break;
+      case KeyCategory.Space:
+        // move to the parent node
+        if (main_tree.target != main_tree) {
+          main_tree.target = main_tree.target.parent;
+        }
+        break;
+      case KeyCategory.Enter:
+        // move to the rightest child node
+        if (! main_tree.target.is_leaf()) {
+          main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
+        }
+        break;
+      case KeyCategory.Right:
+        // move to the right sibling
+        if (main_tree.target.right_sibling != null) {
+          main_tree.target = main_tree.target.right_sibling;
+        } else {
+          if (main_tree.target != main_tree) {
+            main_tree.target = main_tree.target.parent;
+          }
+        }
+        break;
+      case KeyCategory.Left:
+        // move to the left sibling
+        if (main_tree.target.left_sibling != null) {
+          main_tree.target = main_tree.target.left_sibling;
+        } else {
+          if (! main_tree.target.is_leaf()) {
+            main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
+          }
+        }
+        break;
+      case KeyCategory.BackSpace:
+        main_tree.target.delete_to_empty();
+        break;
+      default:
+        console.log("[GFN] other key category. (in InputState.Single state)");
+        break;
     }
+
   } else {
+    // when in the middle of the process of typing control sequence
+
     switch (key_info.category) {
       case KeyCategory.Letter:
         user_input.stock = user_input.stock + key_info.content;
-        console.log("" + key_info.content + "  / Sequence: " + user_input.stock);//<<test>>
+        console.log("" + key_info.content + "  / Seq.: " + user_input.stock);//<<test>>
         break;
       case KeyCategory.BackSpace:
         user_input.stock = user_input.stock.substr(0, user_input.stock.length - 1);
-        console.log("BS / Sequence: " + user_input.stock);//<<test>>
+        console.log("BS / Seq.: " + user_input.stock);//<<test>>
         break;
       case KeyCategory.Enter:
       case KeyCategory.Space:
-        /* deal with control sequence */
-        // main_tree.send(user_input.stock);
+        // deal with control sequence
+        main_tree.send(token_info.make_token_info(user_input.stock));
         user_input.stock = "";
         user_input.state = InputState.Single;
         break;
       default:
+        console.log("[GFN] other key category. (in InputState.Sequence state)");
         break;
     }
     if (user_input.stock.length == 0) {
       user_input.state = InputState.Single;
     }
   }
+
+  // renew display
+  main_element.innerHTML = main_tree.main_tree_to_innerhtml();
+  return;
 }
 
 function keycode_to_key_info(e: KeyboardEvent): KeyInfo {

@@ -15,17 +15,55 @@
   margin-right: auto;
 }
 
-.box-of-tree {
+div.box-of-tree {
   display: inline-block;
   color: #111111;
   font-family: 'Times New Roman', Times, serif;
   font-size: 20pt;
-  font-style: italic;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 2pt;
   padding-right: 2pt;
   background-color: #ccccff;
+  border-width: 1pt;
+  border-color: #aaaaff;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+div.target-of-tree {
+  display: inline-block;
+  color: #111111;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20pt;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 2pt;
+  padding-right: 2pt;
+  background-color: #ffcccc;
+  border-width: 2pt;
+  border-right: 4pt;
+  border-color: #ff4444;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+span.empty-box-of-tree {
+  display: inline-block;
+  color: #ffffff;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20pt;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 0pt;
+  padding-right: 0pt;
+  background-color: #ffffff;
   border-width: 1pt;
   border-color: #8888ff;
   border-style: solid;
@@ -35,22 +73,37 @@
   margin-right: 2pt;
 }
 
-.empty {
+span.empty-target-of-tree {
   display: inline-block;
-  color: #ffcccc;
+  color: #ffffff;
   font-family: 'Times New Roman', Times, serif;
   font-size: 20pt;
-  font-style: italic;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 0pt;
   padding-right: 0pt;
-  background-color: #ffcccc;
-  border-width: 1pt;
+  background-color: #ffffff;
+  border-width: 2pt;
   border-color: #ff4444;
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
   margin-left: 2pt;
   margin-right: 2pt;
+}
+
+span.sequence {
+  color: #111111;
+  font-family: 'Consolas';
+  font-size: 12pt;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 0pt;
+  padding-right: 0pt;
+  background-color: #ffffaa;
+  border-width: 0pt;
+}
+
+.math_italic {
+  font-style: italic;
 }
