@@ -57,7 +57,7 @@ class Tree {
           res += this.items[1].tree_to_innerhtml(mt);
           break;
         default:
-          console.log("[GFN] other Type.");
+          console.log("[GFN] other Type.");//<<test>>
       }
       res += "</div>";
       if (this == mt.target && user_input.stock.length != 0) {
@@ -129,6 +129,30 @@ class MainTree extends Tree {
       }
 
     } else {
+
+      switch (ti.token_type) {
+        case Type.Ord:
+          lc = new Tree(this.target.token_type, this.target.content);
+          rc = new Tree(Type.Ord, ti.content);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = "~concat";
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          break;
+        case Type.Bin:
+          lc = new Tree(this.target.token_type, this.target.content);
+          rc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = rc;
+          break;
+        default:
+          break;
+      }
       console.log("[GFN] non-Empty target.");//<<test>>
     }
   }
