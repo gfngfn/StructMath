@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <title>StructMath</title>
+  <title>Test of StructMath</title>
   <link rel="stylesheet" href="app.css" type="text/css" />
   <link rel="stylesheet" href="tree.css" type="text/css" />
   <script src="token.js"></script>
@@ -11,8 +11,30 @@
   <script src="input.js"></script>
 </head>
 <body>
-  <h1>Display Test of StructMath</h1>
+  <h1>Test of StructMath </h1>
     <div id="content" class="root-box"></div>
+    <p>
+      木構造化された数式エディタのプロトタイプです。
+      カーソルではなく赤枠で入力対象位置が表示されます。
+    </p>
+    <p>
+      [Enter]で内側最右の枠に，[Space]で外側の枠に移動します。
+      [←]および[→]で隣の枠に移動します。右端での[→]は外側へ，左端での[←]は内側へ移動します。
+      [BS]で赤枠の中身が消えて空になります。
+      また，2項演算子の手前の空の赤枠で[BS]を打つと2項演算子が消えて左の項だけが残ります。
+    </p>
+    <p>
+      普通にテキストとして打つ感覚に似せるように，前から順に入力しやすいような挙動をします。
+      試しに以下のようなコマンドを打ってみてください：
+    </p>
+    <ol>
+      <li><kbd>ad-bc</kbd></li>
+      <li><kbd>ab\times[Space]\lambda[Space]</kbd></li><!-- visible space: ␣ -->
+      <li><kbd>pqrs</kbd></li>
+      <li><kbd>\emptyset[Space]\cap[Space]a</kbd></li>
+      <li><kbd>a+b[BS][BS]\times[Space]c</kbd></li>
+    </ol>
+    <p>2015.02.26 gfn</p>
   <script src="app.js"></script>
 </body>
 </html>
