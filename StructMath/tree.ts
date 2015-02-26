@@ -76,6 +76,13 @@ class Tree {
     return;
   }
 
+  copy(tr: Tree): Tree {
+    this.token_type = tr.token_type;
+    this.content = tr.content;
+    this.items = tr.items;
+    return this;
+  }
+
   add_child(ch: Tree): void {
     ch.parent = this;
     if (this.is_leaf()) {
@@ -132,7 +139,7 @@ class MainTree extends Tree {
 
       switch (ti.token_type) {
         case Type.Ord:
-          lc = new Tree(this.target.token_type, this.target.content);
+          lc = new Tree(Type.Empty, null).copy(this.target);
           rc = new Tree(Type.Ord, ti.content);
           this.target.delete_to_empty();
           this.target.token_type = Type.Bin;
@@ -141,7 +148,7 @@ class MainTree extends Tree {
           this.target.add_child(rc);
           break;
         case Type.Bin:
-          lc = new Tree(this.target.token_type, this.target.content);
+          lc = new Tree(Type.Empty, null).copy(this.target);
           rc = new Tree(Type.Empty, null);
           this.target.delete_to_empty();
           this.target.token_type = Type.Bin;

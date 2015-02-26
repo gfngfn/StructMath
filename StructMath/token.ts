@@ -81,7 +81,7 @@ class TokenInfo {
   static bin_to_string: { [key: string]: string } = {
     "+": "＋",
     "-": "－",
-    "~concat": "",
+    "~concat": "\ufeff", // "" is not good for if
     "\\cap": "∩",
     "\\cup": "∪",
     "\\div": "÷",
