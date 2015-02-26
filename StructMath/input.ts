@@ -41,6 +41,7 @@ var token_info: TokenInfo = new TokenInfo();
 
 function react_to_input(e: KeyboardEvent): void {
   var key_info: KeyInfo;
+  var lc: Tree;
 
   key_info = keycode_to_key_info(e);
 
@@ -91,7 +92,16 @@ function react_to_input(e: KeyboardEvent): void {
         }
         break;
       case KeyCategory.BackSpace:
-        main_tree.target.delete_to_empty();
+        if (main_tree.target.token_type != Type.Empty) {
+          main_tree.target.delete_to_empty();
+        } else {
+          if (main_tree.target.parent != null) {
+            if (main_tree.target.parent.items.length == 2) {
+              main_tree.target = main_tree.target.parent;
+              main_tree.target.copy(main_tree.target.items[0]);
+            }
+          }
+        }
         break;
       default:
         console.log("[GFN] other key category. (in InputState.Single state)");
