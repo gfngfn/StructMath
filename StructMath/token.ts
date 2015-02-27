@@ -223,7 +223,7 @@ class TokenInfo {
       this.token_type = Type.Rel;
       this.content = tok;
     } else {
-      console.log("[GFN]: '" + tok + "' does not match any def.");//<<test>>
+      main_tree.log_status("[error] '" + tok + "' does not match any definition.");
       this.token_type = Type.Empty;
       this.content = null;
     }

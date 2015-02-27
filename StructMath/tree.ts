@@ -24,21 +24,58 @@ class Tree {
     var res: string;
 
     if (this.token_type == Type.Empty) {
+
       if (this == mt.target) {
-        if (user_input.stock.length == 0) {
-          res = "<span class='empty-target-of-tree'>|</span>";
+        if (user_input.state != InputState.Sequence) {
+          switch (user_input.sending) {
+            case SendingState.Normal:
+              res = "<span class='empty-target-of-tree'>|</span>";
+              break;
+            case SendingState.Exchange:
+              res = "<span class='empty-target-of-tree-exchange'>|</span>";
+              break;
+            case SendingState.InsertLeft:
+              res = "<span class='empty-target-of-tree-insert-left'>|</span>";
+              break;
+          }
         } else {
-          res = "<span class='empty-target-of-tree'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+          switch (user_input.sending) {
+            case SendingState.Normal:
+              res = "<span class='empty-target-of-tree'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              break;
+            case SendingState.Exchange:
+              res = "<span class='empty-target-of-tree-exchange'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              break;
+            case SendingState.InsertLeft:
+              res = "<span class='empty-target-of-tree-insert-left'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              break;
+          }
         }
       } else {
         res = "<span class='empty-box-of-tree'>|</span>";
       }
       if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
+
     } else {
+
+      res = "";
+      if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.InsertLeft) {
+        res += "<span class='sequence'>" + user_input.stock + "</span>";
+      }
       if (this == mt.target) {
-        res = "<div class='target-of-tree'>";
+        switch (user_input.sending) {
+          case SendingState.Normal:
+            res += "<div class='target-of-tree'>";
+            break;
+          case SendingState.Exchange:
+            res += "<div class='target-of-tree-exchange'>";
+            break;
+          case SendingState.InsertLeft:
+            res += "<div class='target-of-tree-insert-left'>";
+            break;
+        }
       } else {
-        res = "<div class='box-of-tree'>";
+        res += "<div class='box-of-tree'>";
       }
       switch (this.token_type) {
         case Type.Ord:
@@ -47,19 +84,25 @@ class Tree {
         case Type.Un:
         case Type.Op:
           res += content_to_string(this.content);
+          if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
+            res += "<span class='sequence'>" + user_input.stock + "</span>";
+          }
           res += this.items[0].tree_to_innerhtml(mt);
           break;
         case Type.Bin:
         case Type.Rel:
           res += this.items[0].tree_to_innerhtml(mt);
           res += content_to_string(this.content);
+          if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
+            res += "<span class='sequence'>" + user_input.stock + "</span>";
+          }
           res += this.items[1].tree_to_innerhtml(mt);
           break;
         default:
           console.log("[GFN] other Type.");//<<test>>
       }
       res += "</div>";
-      if (this == mt.target && user_input.stock.length != 0) {
+      if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Normal) {
         res += "<span class='sequence'>" + user_input.stock + "</span>";
       }
       if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
@@ -96,6 +139,7 @@ function copy_tree(newtr: Tree, oldtr: Tree): void {
 
   newtr.token_type = oldtr.token_type
   newtr.content = oldtr.content;
+  newtr.items = [];
   for (i = 0; i < oldtr.items.length; i++) {
     newtr.add_child(oldtr.items[i]);
   }
@@ -105,14 +149,105 @@ function copy_tree(newtr: Tree, oldtr: Tree): void {
 // tree including the information for the location of input target
 class MainTree extends Tree {
   target: Tree;
+  status: HTMLElement;
 
-  constructor(tt: Type, cont: string) {
+  constructor(tt: Type, cont: string, stt: HTMLElement) {
     super(tt, cont);
     this.target = this;
+    this.status = stt;
   }
 
+  log_status(sttcont: string): void {
+    this.status.innerHTML = sttcont;
+    return;
+  }
+
+  // display as html
   main_tree_to_innerhtml(): string {
     return this.tree_to_innerhtml(this);
+  }
+
+  // move to the parent node
+  press_space(): void {
+    if (this.target.parent != null) {
+      this.target = this.target.parent;
+    }
+  }
+
+  // move to the rightest child node
+  press_enter(): void {
+    if (!this.target.is_leaf()) {
+      this.target = this.target.items[this.target.items.length - 1];
+    }
+  }
+
+  // move target to left or inner
+  left(): void {
+    var temp_tree: Tree;
+
+    if (!this.target.is_leaf()) {
+      this.target = this.target.items[this.target.items.length - 1];
+    } else {
+      temp_tree = this.target;
+      while (true) {
+        if (temp_tree.left_sibling != null) {
+          this.target = temp_tree.left_sibling;
+          break;
+        }
+        if (temp_tree.parent == null) {
+          break;
+        }
+        temp_tree = temp_tree.parent;
+      }
+    }
+  }
+
+  // move target to left sibling
+  left_jump(): void {
+    if (this.target.left_sibling != null) {
+      this.target = this.target.left_sibling;
+    }
+  }
+
+  // move target to right or outer
+  right(): void {
+    var temp_tree: Tree;
+
+    if (this.target.right_sibling != null) {
+      temp_tree = this.target.right_sibling;
+      while (!temp_tree.is_leaf()) {
+        temp_tree = temp_tree.items[0];
+      }
+      this.target = temp_tree;
+    } else {
+      if (this.target.parent != null) {
+        this.target = this.target.parent;
+      }
+    }
+  }
+
+  // move target to right sibling
+  right_jump(): void {
+    if (this.target.right_sibling != null) {
+      this.target = this.target.right_sibling;
+    }
+  }
+
+  // delete content of target
+  press_backspace(): void {
+    if (this.target.token_type != Type.Empty) {
+      this.target.delete_to_empty();
+    } else {
+      if (this.target.parent != null) {
+        if (this.target.parent.items.length == 1) {
+          this.target = this.target.parent;
+          this.target.delete_to_empty();
+        } else if (this.target.parent.items.length == 2) {
+          this.target = this.target.parent;
+          copy_tree(this.target, this.target.items[0]);
+        }
+      }
+    }
   }
 
   // process of addition of new node
@@ -162,7 +297,6 @@ class MainTree extends Tree {
     } else {
       // when target is not Empty
 
-      // **contains bug: wrong parent**
       switch (ti.token_type) {
         case Type.Ord:
           lc = new Tree(Type.Empty, null);
@@ -196,8 +330,6 @@ class MainTree extends Tree {
           this.target.content = ti.content;
           this.target.add_child(lc);
           this.target.add_child(rc);
-          if (lc.parent == this.target && rc.parent == this.target) { console.log("OK"); } else { console.log("NG"); }//<<test>>
-          if (!lc.is_leaf()) { if (lc.items[0].parent == lc) { console.log("2OK"); } else { console.log("2NG"); } }
           this.target = rc;
           break;
         case Type.Rel:
@@ -212,9 +344,83 @@ class MainTree extends Tree {
           this.target = rc;
           break;
         default:
-          console.log("[GFN] other Type. (in 'when target is not Empty')");
+          console.log("[GFN] other Type. (in 'when target is not Empty')");//<<test>>
           break;
       }
     }
+    return;
+  }
+
+  send_exchange(ti: TokenInfo): void {
+    if (this.target.token_type == Type.Un && ti.token_type == Type.Un) {
+      this.log_status("'" + this.target.content + "' exchanged with '" + ti.content + "'.");
+      this.target.content = ti.content;
+    } else if (this.target.token_type == Type.Bin && ti.token_type == Type.Bin) {
+      this.log_status("'" + this.target.content + "' exchanged with '" + ti.content + "'.");
+      this.target.content = ti.content;
+    } else if (this.target.token_type == Type.Rel && ti.token_type == Type.Rel) {
+      this.log_status("'" + this.target.content + "' exchanged with '" + ti.content + "'.");
+      this.target.content = ti.content;
+    } else {
+      this.log_status("[error] inappropriate exchange of '" + this.target.content + "' with '" + ti.content + "'.");
+    }
+    return;
+  }
+
+  send_insert_left(ti: TokenInfo): void {
+    var lc: Tree;
+    var rc: Tree;
+
+    if (this.target.token_type == Type.Empty) {
+      this.send(ti);
+    } else {
+      switch (ti.token_type) {
+        case Type.Ord:
+          rc = new Tree(Type.Empty, null);
+          copy_tree(rc, this.target);
+          lc = new Tree(Type.Ord, ti.content);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = "~concat";
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          break;
+        case Type.Un:
+          lc = new Tree(Type.Empty, null);
+          copy_tree(lc, this.target);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Un;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          break;
+        case Type.Bin:
+          rc = new Tree(Type.Empty, null);
+          copy_tree(rc, this.target);
+          lc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Bin;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = lc;
+          break;
+        case Type.Rel:
+          rc = new Tree(Type.Empty, null);
+          copy_tree(rc, this.target);
+          lc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.Rel;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = lc;
+          break;
+        default:
+          console.log("[GFN] other Type. (in 'when target is not Empty')");//<<test>>
+          break;
+      }
+    }
+    this.log_status("left insertion done.");
+    return;
   }
 }

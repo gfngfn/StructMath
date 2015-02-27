@@ -10,10 +10,11 @@ var sub22: Tree;
 */
 
 var main_element: HTMLElement = document.getElementById("content");
+var main_status: HTMLElement = document.getElementById("status");
 
 window.onload = () => {
 
-  main_tree = new MainTree(Type.Empty, null);
+  main_tree = new MainTree(Type.Empty, null, main_status);
 /*
   main_tree = new MainTree(Type.Bin, "+");
   sub1 = new Tree(Type.Ord, "a");

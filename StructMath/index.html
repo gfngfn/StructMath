@@ -13,34 +13,35 @@
 <body>
   <h1>Test of StructMath </h1>
     <div id="content" class="root-box"></div>
+  <div id="status" class="status-box">status</div>
     <p>
       木構造化された数式エディタのプロトタイプです。
       カーソルではなく赤枠で入力対象位置が表示されます。
       主要操作は以下の通りです：
     </p>
     <ul>
-      <li>各ラテン文字・初期号：文字として入力される</li>
+      <li>各ラテン文字・諸記号：文字として入力される</li>
       <li><kbd>\</kbd>：制御綴の入力の開始</li>
       <li><kbd>[BS]</kbd>：選択している赤枠を空にする（空の赤枠では直前の演算子を消します）</li>
-      <li><kbd>[→]</kbd>：赤枠を右・外へ移動させる</li>
-      <li><kbd>[←]</kbd>：赤枠を左・内へ移動させる</li>
-      <li><kbd>[Shift]＋[→]</kbd>：赤枠を同階層の右へ移動させる</li>
-      <li><kbd>[Shift]＋[←]</kbd>：赤枠を同階層の左へ移動させる</li>
-      <li><kbd>[Space]</kbd>：赤枠を上の階層へ移動させる</li>
-      <li><kbd>[Enter]</kbd>：赤枠を下の階層の最も右へ移動させる</li>
+      <li><kbd>[→]/[←]</kbd>：赤枠を(右・外|左・内)へ移動させる</li>
+      <li><kbd>[Shift]＋[→]/[←]</kbd>：赤枠を同階層の(右/左)へ移動させる</li>
+      <li><kbd>␣</kbd>（<kbd>[Space]</kbd>）：赤枠を外の階層へ移動させる・制御綴の入力の終了</li>
+      <li><kbd>[Enter]</kbd>：赤枠を内の階層の最も右へ移動させる・制御綴の入力の終了</li>
+      <li><kbd>[F2]</kbd>：交換モードに入る・出る</li>
+      <li><kbd>[F4]</kbd>：左向き挿入モードに入る・出る</li>
     </ul>
     <p>
       普通にテキストとして打つ感覚に似せるように，前から順に入力しやすいような挙動をします。
       試しに以下のようなコマンドを打って，動作を確認してみてください：
     </p>
     <ul>
-      <li><kbd>ad-bc</kbd></li>
-      <li><kbd>ab\times[Space]\lambda[Space]</kbd></li><!-- visible space: ␣ -->
-      <li><kbd>pqrs</kbd></li>
-      <li><kbd>\emptyset[Space]\cup[Space]a</kbd></li>
-      <li><kbd>a+b[←]\times[Space]c</kbd></li>
-      <li><kbd>a+b[BS][BS]\times[Space]c</kbd></li>
-      <li><kbd>A\in[Space]U[Space]\land[Space]B\in[Space]U[Space][Space]\Rightarrow[Space]A\cap[Space]B[Space]\in[Space]U</kbd></li>
+      <li><kbd>ab-\lambda␣</kbd></li><!-- visible space: ␣ -->
+      <li><kbd>a+b[←]\times␣c</kbd></li>
+      <li><kbd>a+b[BS][BS]\times␣c</kbd></li>
+      <li><kbd>A\in␣U␣\land␣B\in␣U␣␣\Rightarrow␣A\cap␣B␣\in␣U</kbd></li>
+      <li><kbd>A\oplus␣B␣[F2]\otimes␣</kbd></li>
+      <li><kbd>ma[F4]=F</kbd></li>
+      <li><kbd>\theta␣[F4]\sin␣\cos␣\theta␣</kbd></li>
     </ul>
     <p>2015.02.26 gfn</p>
   <script src="app.js"></script>

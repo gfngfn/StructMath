@@ -1,14 +1,17 @@
 ﻿///<reference path="token.ts" />
 
 enum InputState { Single, Sequence }
+enum SendingState { Normal, Exchange, InsertLeft }
 
 class UserInput {
   stock: string;
   state: InputState;
+  sending: SendingState;
 
   constructor() {
     this.stock = "";
     this.state = InputState.Single;
+    this.sending = SendingState.Normal;
   }
 }
 
@@ -23,6 +26,8 @@ enum KeyCategory {
   Enter,
   SequencePrefix,
   Letter,
+  Exchange,
+  InsertLeft,
   Invalid
 }
 
@@ -47,6 +52,8 @@ var KEYCODE_LEFT = 37;
 var KEYCODE_RIGHT = 39;
 var KEYCODE_DELETE = 46;
 var KEYCODE_ENTER = 13;
+var KEYCODE_EXCHANGE = 113;//[F2]
+var KEYCODE_INSERTLEFT = 115;//[F4]
 
 var user_input: UserInput = new UserInput();
 var token_info: TokenInfo = new TokenInfo();
@@ -55,14 +62,31 @@ function react_to_input(e: KeyboardEvent): void {
   var key_info: KeyInfo;
   var temp_tree: Tree;
 
-  //disable default reaction by browsers
-  //e.preventDefault();
-
   key_info = keycode_to_key_info(e);
 
-  if (user_input.state == InputState.Single) {
+  main_tree.log_status("-");
+
+  if (user_input.state != InputState.Sequence) {
  
     switch (key_info.category) {
+      case KeyCategory.Exchange:
+        if (user_input.sending == SendingState.Exchange) {
+          user_input.sending = SendingState.Normal;
+          main_tree.log_status("[normal mode]");
+        } else {
+          user_input.sending = SendingState.Exchange;
+          main_tree.log_status("[exchange mode]");
+        }
+        break;
+      case KeyCategory.InsertLeft:
+        if (user_input.sending == SendingState.InsertLeft) {
+          user_input.sending = SendingState.Normal;
+          main_tree.log_status("[normal mode]");
+        } else {
+          user_input.sending = SendingState.InsertLeft;
+          main_tree.log_status("[insert-left mode]");
+        }
+        break;
       case KeyCategory.SequencePrefix:
         user_input.stock = key_info.content;
         user_input.state = InputState.Sequence;
@@ -71,77 +95,48 @@ function react_to_input(e: KeyboardEvent): void {
       case KeyCategory.Letter:
         // deal with letter
         token_info.make_token_info(key_info.content);
-        main_tree.send(token_info);
+        switch (user_input.sending) {
+          case SendingState.Normal:
+            main_tree.send(token_info);
+            break;
+          case SendingState.Exchange:
+            main_tree.send_exchange(token_info);
+            user_input.sending = SendingState.Normal;
+            break;
+          case SendingState.InsertLeft:
+            main_tree.send_insert_left(token_info);
+            user_input.sending = SendingState.Normal;
+            break;
+        }
         console.log(key_info.content);//<<test>>
         break;
       case KeyCategory.Space:
-        // move to the parent node
-        if (main_tree.target != main_tree) {
-          main_tree.target = main_tree.target.parent;
-        }
+        //disable default reaction by browsers
+        e.preventDefault();
+        main_tree.press_space();
         break;
       case KeyCategory.Enter:
-        // move to the rightest child node
-        if (! main_tree.target.is_leaf()) {
-          main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
-        }
+        main_tree.press_enter();
         break;
       case KeyCategory.Left:
-        // move target to left
-        if (!main_tree.target.is_leaf()) {
-          main_tree.target = main_tree.target.items[main_tree.target.items.length - 1];
-        } else {
-          temp_tree = main_tree.target;
-          while (true) {
-            if (temp_tree.left_sibling != null) {
-              main_tree.target = temp_tree.left_sibling;
-              break;
-            }
-            if (temp_tree.parent == null) {
-              break;
-            }
-            temp_tree = temp_tree.parent;
-          }
-        }
+        main_tree.left();
         break;
       case KeyCategory.LeftJump:
-        if (main_tree.target.left_sibling != null) {
-          main_tree.target = main_tree.target.left_sibling;
-        }
+        main_tree.left_jump();
         break;
       case KeyCategory.Right:
-        // move target to right
-        if (main_tree.target.right_sibling != null) {
-          temp_tree = main_tree.target.right_sibling;
-          while (! temp_tree.is_leaf()) {
-            temp_tree = temp_tree.items[0];
-          }
-          main_tree.target = temp_tree;
-        } else {
-          if (main_tree.target.parent != null) {
-            main_tree.target = main_tree.target.parent;
-          }
-        }
+        main_tree.right();
         break;
       case KeyCategory.RightJump:
-        if (main_tree.target.right_sibling != null) {
-          main_tree.target = main_tree.target.right_sibling;
-        }
+        main_tree.right_jump();
         break;
       case KeyCategory.BackSpace:
-        if (main_tree.target.token_type != Type.Empty) {
-          main_tree.target.delete_to_empty();
-        } else {
-          if (main_tree.target.parent != null) {
-            if (main_tree.target.parent.items.length == 2) {
-              main_tree.target = main_tree.target.parent;
-              copy_tree(main_tree.target, main_tree.target.items[0]);
-            }
-          }
-        }
+        // disable default reaction by browsers
+        e.preventDefault();
+        main_tree.press_backspace();
         break;
       default:
-        console.log("[GFN] other key category. (in InputState.Single state)");
+        console.log("[GFN] other key category. (in InputState.Single state)");//<<test>>
         break;
     }
 
@@ -160,7 +155,19 @@ function react_to_input(e: KeyboardEvent): void {
       case KeyCategory.Enter:
       case KeyCategory.Space:
         // deal with control sequence
-        main_tree.send(token_info.make_token_info(user_input.stock));
+        switch (user_input.sending) {
+          case SendingState.Normal:
+            main_tree.send(token_info.make_token_info(user_input.stock));
+            break;
+          case SendingState.Exchange:
+            main_tree.send_exchange(token_info.make_token_info(user_input.stock));
+            user_input.sending = SendingState.Normal;
+            break;
+          case SendingState.InsertLeft:
+            main_tree.send_insert_left(token_info.make_token_info(user_input.stock));
+            user_input.sending = SendingState.Normal;
+            break;
+        }
         user_input.stock = "";
         user_input.state = InputState.Single;
         break;
@@ -215,6 +222,12 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
         break;
       case KEYCODE_ENTER:
         cat = KeyCategory.Enter;
+        break;
+      case KEYCODE_EXCHANGE:
+        cat = KeyCategory.Exchange;
+        break;
+      case KEYCODE_INSERTLEFT:
+        cat = KeyCategory.InsertLeft;
         break;
       case KEYCODE_SHIFT:
       case KEYCODE_CTRL:

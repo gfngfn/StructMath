@@ -1,25 +1,7 @@
 ﻿@charset "UTF-8";
 
-.root-box {
-  padding-top: 8pt;
-  padding-bottom: 8pt;
-  padding-left: 8pt;
-  padding-right: 8pt;
-  background-color: #eeeeee;
-  border-width: 1pt;
-  border-color: #111111;
-  border-style: dotted;
-  margin-top: 4pt;
-  margin-bottom: 4pt;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 div.box-of-tree {
   display: inline-block;
-  color: #111111;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 20pt;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 2pt;
@@ -36,9 +18,6 @@ div.box-of-tree {
 
 div.target-of-tree {
   display: inline-block;
-  color: #111111;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 20pt;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 2pt;
@@ -54,11 +33,43 @@ div.target-of-tree {
   margin-right: 2pt;
 }
 
-span.empty-box-of-tree {
+div.target-of-tree-exchange {
+  display: inline-block;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 2pt;
+  padding-right: 2pt;
+  background-color: #ffcc88;
+  border-width: 2pt;
+  border-right: 4pt;
+  border-color: #dd4400;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+div.target-of-tree-insert-left {
+  display: inline-block;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 2pt;
+  padding-right: 2pt;
+  background-color: #88dd88;
+  border-width: 2pt;
+  border-right: 4pt;
+  border-color: #00aa00;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+.empty-box-of-tree {
   display: inline-block;
   color: #ffffff;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 20pt;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 0pt;
@@ -73,11 +84,9 @@ span.empty-box-of-tree {
   margin-right: 2pt;
 }
 
-span.empty-target-of-tree {
+.empty-target-of-tree {
   display: inline-block;
   color: #ffffff;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 20pt;
   padding-top: 0pt;
   padding-bottom: 0pt;
   padding-left: 0pt;
@@ -92,7 +101,41 @@ span.empty-target-of-tree {
   margin-right: 2pt;
 }
 
-span.sequence {
+.empty-target-of-tree-exchange {
+  display: inline-block;
+  color: #ffffff;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 0pt;
+  padding-right: 0pt;
+  background-color: #ffffff;
+  border-width: 2pt;
+  border-color: #dd4400;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+.empty-target-of-tree-insert-left {
+  display: inline-block;
+  color: #ffffff;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  padding-left: 0pt;
+  padding-right: 0pt;
+  background-color: #ffffff;
+  border-width: 2pt;
+  border-color: #00aa00;
+  border-style: solid;
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+}
+
+.sequence {
   color: #111111;
   font-family: 'Consolas';
   font-size: 12pt;
