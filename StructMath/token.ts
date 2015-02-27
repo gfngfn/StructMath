@@ -132,6 +132,21 @@ class TokenInfo {
     "\\unmp": "∓",
     "\\unpm": "±",
     "\\unvdash": "⊢",
+
+    "\\cos": "cos",
+    "\\cot": "cot",
+    "\\csc": "csc",
+    "\\cod": "cod",
+    "\\det": "det",
+    "\\diag": "diag",
+    "\\dom": "dom",
+    "\\ln": "ln",
+    "\\log": "log",
+    "\\rot": "rot",
+    "\\sec": "sec",
+    "\\sin": "sin",
+    "\\tan": "tan",
+    "\\tr": "tr"
   }
 
   static bin_assoc_to_string: { [key: string]: string } = {

@@ -56,7 +56,7 @@ function react_to_input(e: KeyboardEvent): void {
   var temp_tree: Tree;
 
   //disable default reaction by browsers
-  e.preventDefault();
+  //e.preventDefault();
 
   key_info = keycode_to_key_info(e);
 
@@ -135,7 +135,7 @@ function react_to_input(e: KeyboardEvent): void {
           if (main_tree.target.parent != null) {
             if (main_tree.target.parent.items.length == 2) {
               main_tree.target = main_tree.target.parent;
-              main_tree.target.copy(main_tree.target.items[0]);
+              copy_tree(main_tree.target, main_tree.target.items[0]);
             }
           }
         }
