@@ -62,6 +62,9 @@ function react_to_input(e: KeyboardEvent): void {
   var key_info: KeyInfo;
   var temp_tree: Tree;
 
+  //disable default reaction by browsers
+  //e.preventDefault();
+
   key_info = keycode_to_key_info(e);
 
   main_tree.log_status("-");
@@ -111,8 +114,6 @@ function react_to_input(e: KeyboardEvent): void {
         console.log(key_info.content);//<<test>>
         break;
       case KeyCategory.Space:
-        //disable default reaction by browsers
-        e.preventDefault();
         main_tree.press_space();
         break;
       case KeyCategory.Enter:
@@ -131,8 +132,6 @@ function react_to_input(e: KeyboardEvent): void {
         main_tree.right_jump();
         break;
       case KeyCategory.BackSpace:
-        // disable default reaction by browsers
-        e.preventDefault();
         main_tree.press_backspace();
         break;
       default:

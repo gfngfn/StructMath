@@ -1,6 +1,15 @@
 ///<reference path="token.ts" />
 
-enum Type { Empty, Ord, Un, Bin, LR, Op, Rel }
+enum Type {
+  Empty,
+  Ord,
+  Un,
+  Op,
+  BinAssoc,
+  BinOther,
+  Rel,
+  LR
+}
 
 class Tree {
   token_type: Type;
@@ -79,27 +88,41 @@ class Tree {
       }
       switch (this.token_type) {
         case Type.Ord:
-          res += content_to_string(this.content);
+          res += content_ord_to_string(this.content);
           break;
         case Type.Un:
-        case Type.Op:
-          res += content_to_string(this.content);
+          res += content_un_to_string(this.content, mt, this.items);
           if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
             res += "<span class='sequence'>" + user_input.stock + "</span>";
           }
-          res += this.items[0].tree_to_innerhtml(mt);
           break;
-        case Type.Bin:
-        case Type.Rel:
-          res += this.items[0].tree_to_innerhtml(mt);
-          res += content_to_string(this.content);
+        case Type.Op:
+          break;
+        case Type.BinAssoc:
+          res += content_bin_assoc_to_string(this.content, mt, this.items);
           if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
             res += "<span class='sequence'>" + user_input.stock + "</span>";
           }
-          res += this.items[1].tree_to_innerhtml(mt);
+          break;
+        case Type.BinOther:
+          //res += this.items[0].tree_to_innerhtml(mt);
+          res += content_bin_other_to_string(this.content, mt, this.items);
+          if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
+            res += "<span class='sequence'>" + user_input.stock + "</span>";
+          }
+          //res += this.items[1].tree_to_innerhtml(mt);
+          break;
+        case Type.Rel:
+          //res += this.items[0].tree_to_innerhtml(mt);
+          res += content_rel_to_string(this.content, mt, this.items);
+          if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
+            res += "<span class='sequence'>" + user_input.stock + "</span>";
+          }
+          //res += this.items[1].tree_to_innerhtml(mt);
           break;
         default:
           console.log("[GFN] other Type.");//<<test>>
+          break;
       }
       res += "</div>";
       if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Normal) {
@@ -271,8 +294,17 @@ class MainTree extends Tree {
           this.target.add_child(lc);
           this.target = lc;
           break;
-        case Type.Bin:
-          this.target.token_type = Type.Bin;
+        case Type.BinAssoc:
+          this.target.token_type = Type.BinAssoc;
+          this.target.content = ti.content;
+          lc = new Tree(Type.Empty, null);
+          rc = new Tree(Type.Empty, null);
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = lc;
+          break;
+        case Type.BinOther:
+          this.target.token_type = Type.BinOther;
           this.target.content = ti.content;
           lc = new Tree(Type.Empty, null);
           rc = new Tree(Type.Empty, null);
@@ -303,7 +335,7 @@ class MainTree extends Tree {
           copy_tree(lc, this.target);
           rc = new Tree(Type.Ord, ti.content);
           this.target.delete_to_empty();
-          this.target.token_type = Type.Bin;
+          this.target.token_type = Type.BinAssoc;
           this.target.content = "~concat";
           this.target.add_child(lc);
           this.target.add_child(rc);
@@ -315,18 +347,29 @@ class MainTree extends Tree {
           rcc = new Tree(Type.Empty, null);
           rc.add_child(rcc);
           this.target.delete_to_empty();
-          this.target.token_type = Type.Bin;
+          this.target.token_type = Type.BinAssoc;
           this.target.content = "~concat";
           this.target.add_child(lc);
           this.target.add_child(rc);
           this.target = rcc;
           break;
-        case Type.Bin:
+        case Type.BinAssoc:
           lc = new Tree(Type.Empty, null);
           copy_tree(lc, this.target);
           rc = new Tree(Type.Empty, null);
           this.target.delete_to_empty();
-          this.target.token_type = Type.Bin;
+          this.target.token_type = Type.BinAssoc;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = rc;
+          break;
+        case Type.BinOther:
+          lc = new Tree(Type.Empty, null);
+          copy_tree(lc, this.target);
+          rc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.BinOther;
           this.target.content = ti.content;
           this.target.add_child(lc);
           this.target.add_child(rc);
@@ -355,7 +398,8 @@ class MainTree extends Tree {
     if (this.target.token_type == Type.Un && ti.token_type == Type.Un) {
       this.log_status("'" + this.target.content + "' exchanged with '" + ti.content + "'.");
       this.target.content = ti.content;
-    } else if (this.target.token_type == Type.Bin && ti.token_type == Type.Bin) {
+    } else if (this.target.token_type == Type.BinOther && ti.token_type == Type.BinOther) {
+      // should be BinAssoc-proof.
       this.log_status("'" + this.target.content + "' exchanged with '" + ti.content + "'.");
       this.target.content = ti.content;
     } else if (this.target.token_type == Type.Rel && ti.token_type == Type.Rel) {
@@ -380,7 +424,7 @@ class MainTree extends Tree {
           copy_tree(rc, this.target);
           lc = new Tree(Type.Ord, ti.content);
           this.target.delete_to_empty();
-          this.target.token_type = Type.Bin;
+          this.target.token_type = Type.BinAssoc;
           this.target.content = "~concat";
           this.target.add_child(lc);
           this.target.add_child(rc);
@@ -393,12 +437,23 @@ class MainTree extends Tree {
           this.target.content = ti.content;
           this.target.add_child(lc);
           break;
-        case Type.Bin:
+        case Type.BinAssoc:
           rc = new Tree(Type.Empty, null);
           copy_tree(rc, this.target);
           lc = new Tree(Type.Empty, null);
           this.target.delete_to_empty();
-          this.target.token_type = Type.Bin;
+          this.target.token_type = Type.BinAssoc;
+          this.target.content = ti.content;
+          this.target.add_child(lc);
+          this.target.add_child(rc);
+          this.target = lc;
+          break;
+        case Type.BinOther:
+          rc = new Tree(Type.Empty, null);
+          copy_tree(rc, this.target);
+          lc = new Tree(Type.Empty, null);
+          this.target.delete_to_empty();
+          this.target.token_type = Type.BinOther;
           this.target.content = ti.content;
           this.target.add_child(lc);
           this.target.add_child(rc);

@@ -12,8 +12,8 @@ div.box-of-tree {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 div.target-of-tree {
@@ -29,8 +29,8 @@ div.target-of-tree {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 div.target-of-tree-exchange {
@@ -46,8 +46,8 @@ div.target-of-tree-exchange {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 div.target-of-tree-insert-left {
@@ -63,8 +63,8 @@ div.target-of-tree-insert-left {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 .empty-box-of-tree {
@@ -80,8 +80,8 @@ div.target-of-tree-insert-left {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 .empty-target-of-tree {
@@ -97,8 +97,8 @@ div.target-of-tree-insert-left {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 .empty-target-of-tree-exchange {
@@ -114,8 +114,8 @@ div.target-of-tree-insert-left {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 .empty-target-of-tree-insert-left {
@@ -131,8 +131,8 @@ div.target-of-tree-insert-left {
   border-style: solid;
   margin-top: 2pt;
   margin-bottom: 2pt;
-  margin-left: 2pt;
-  margin-right: 2pt;
+  margin-left: 1pt;
+  margin-right: 1pt;
 }
 
 .sequence {
@@ -147,6 +147,19 @@ div.target-of-tree-insert-left {
   border-width: 0pt;
 }
 
-.math_italic {
+.math-italic {
   font-style: italic;
+}
+
+.fraction {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.fraction-line {
+  color: #111111;
+  padding: 0pt;
+  margin: 0pt;
+  border-style: solid;
 }

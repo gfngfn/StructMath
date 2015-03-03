@@ -9,217 +9,220 @@ class TokenInfo {
     this.content = "";
   }
 
-  static ord_letter_to_string: { [key: string]: string } = {
+  static ord_letter_hash: { [key: string]: string[] } = {
     //"\\": "",
-    "a": "a",
-    "b": "b",
-    "c": "c",
-    "d": "d",
-    "e": "e",
-    "f": "f",
-    "g": "g",
-    "h": "h",
-    "i": "i",
-    "j": "j",
-    "k": "k",
-    "l": "l",
-    "m": "m",
-    "n": "n",
-    "o": "o",
-    "p": "p",
-    "q": "q",
-    "r": "r",
-    "s": "s",
-    "t": "t",
-    "u": "u",
-    "v": "v",
-    "w": "w",
-    "x": "x",
-    "y": "y",
-    "z": "z",
+    "a": ["a"],
+    "b": ["b"],
+    "c": ["c"],
+    "d": ["d"],
+    "e": ["e"],
+    "f": ["f"],
+    "g": ["g"],
+    "h": ["h"],
+    "i": ["i"],
+    "j": ["j"],
+    "k": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "o": ["o"],
+    "p": ["p"],
+    "q": ["q"],
+    "r": ["r"],
+    "s": ["s"],
+    "t": ["t"],
+    "u": ["u"],
+    "v": ["v"],
+    "w": ["w"],
+    "x": ["x"],
+    "y": ["y"],
+    "z": ["z"],
 
-    "A": "A",
-    "B": "B",
-    "C": "C",
-    "D": "D",
-    "E": "E",
-    "F": "F",
-    "G": "G",
-    "H": "H",
-    "I": "I",
-    "J": "J",
-    "K": "K",
-    "L": "L",
-    "M": "M",
-    "N": "N",
-    "O": "O",
-    "P": "P",
-    "Q": "Q",
-    "R": "R",
-    "S": "S",
-    "T": "T",
-    "U": "U",
-    "V": "V",
-    "W": "W",
-    "X": "X",
-    "Y": "Y",
-    "Z": "Z",
+    "A": ["A"],
+    "B": ["B"],
+    "C": ["C"],
+    "D": ["D"],
+    "E": ["E"],
+    "F": ["F"],
+    "G": ["G"],
+    "H": ["H"],
+    "I": ["I"],
+    "J": ["J"],
+    "K": ["K"],
+    "L": ["L"],
+    "M": ["M"],
+    "N": ["N"],
+    "O": ["O"],
+    "P": ["P"],
+    "Q": ["Q"],
+    "R": ["R"],
+    "S": ["S"],
+    "T": ["T"],
+    "U": ["U"],
+    "V": ["V"],
+    "W": ["W"],
+    "X": ["X"],
+    "Y": ["Y"],
+    "Z": ["Z"],
 
-    "\\alpha": "α",
-    "\\beta": "β",
-    "\\gamma": "γ",
-    "\\delta": "δ",
-    "\\epsilon": "ε",
-    "\\zeta": "ζ",
-    "\\eta": "η",
-    "\\theta": "θ",
-    "\\iota": "ι",
-    "\\kappa": "κ",
-    "\\lambda": "λ",
-    "\\mu": "μ",
-    "\\nu": "ν",
-    "\\xi": "ξ",
-    "\\omicron": "ο",
-    "\\pi": "π",
-    "\\rho": "ρ",
-    "\\sigma": "σ",
-    "\\tau": "τ",
-    "\\upsilon": "υ",
-    "\\phi": "φ",
-    "\\chi": "χ",
-    "\\psi": "ψ",
-    "\\omega": "ω",
+    "\\alpha": ["α"],
+    "\\beta": ["β"],
+    "\\gamma": ["γ"],
+    "\\delta": ["δ"],
+    "\\epsilon": ["ε"],
+    "\\zeta": ["ζ"],
+    "\\eta": ["η"],
+    "\\theta": ["θ"],
+    "\\iota": ["ι"],
+    "\\kappa": ["κ"],
+    "\\lambda": ["λ"],
+    "\\mu": ["μ"],
+    "\\nu": ["ν"],
+    "\\xi": ["ξ"],
+    "\\omicron": ["ο"],
+    "\\pi": ["π"],
+    "\\rho": ["ρ"],
+    "\\sigma": ["σ"],
+    "\\tau": ["τ"],
+    "\\upsilon": ["υ"],
+    "\\phi": ["φ"],
+    "\\chi": ["χ"],
+    "\\psi": ["ψ"],
+    "\\omega": ["ω"],
 
-    "\\Gamma": "Γ",
-    "\\Delta": "Δ",
-    "\\Theta": "Θ",
-    "\\Lambda": "Λ",
-    "\\Xi": "Ξ",
-    "\\Pi": "Π",
-    "\\Sigma": "Σ",
-    "\\Upsilon": "Υ",
-    "\\Phi": "Φ",
-    "\\Psi": "Ψ",
-    "\\Omega": "Ω",
+    "\\Gamma": ["Γ"],
+    "\\Delta": ["Δ"],
+    "\\Theta": ["Θ"],
+    "\\Lambda": ["Λ"],
+    "\\Xi": ["Ξ"],
+    "\\Pi": ["Π"],
+    "\\Sigma": ["Σ"],
+    "\\Upsilon": ["Υ"],
+    "\\Phi": ["Φ"],
+    "\\Psi": ["Ψ"],
+    "\\Omega": ["Ω"],
 
-    "\\ell": "ℓ"
+    "\\ell": ["ℓ"]
   }
 
-  static ord_other_to_string: { [key: string]: string } = {
-    "1": "1",
-    "2": "2",
-    "3": "3",
-    "4": "4",
-    "5": "5",
-    "6": "6",
-    "7": "7",
-    "8": "8",
-    "9": "9",
-    "0": "0",
-    "\\bot": "⊥",
-    "\\emptyset": "∅",
-    "\\infty": "∞"
+  static ord_other_hash: { [key: string]: string[] } = {
+    "1": ["1"],
+    "2": ["2"],
+    "3": ["3"],
+    "4": ["4"],
+    "5": ["5"],
+    "6": ["6"],
+    "7": ["7"],
+    "8": ["8"],
+    "9": ["9"],
+    "0": ["0"],
+    "\\bot": ["⊥"],
+    "\\emptyset": ["∅"],
+    "\\infty": ["∞"]
   }
 
-  static un_to_string: { [key: string]: string } = {
-    "\\+": "＋",
-    "\\-": "－",
-    "\\Im": "ℑ",
-    "\\lnot": "￢",
-    "\\nabla": "∇",
-    "\\Re": "ℜ",
-    "\\unmodels": "⊧",
-    "\\unmp": "∓",
-    "\\unpm": "±",
-    "\\unvdash": "⊢",
+  static un_hash: { [key: string]: string[] } = {
+    "\\+": ["＋", ""],
+    "\\-": ["－", ""],
+    "\\Im": ["ℑ", ""],
+    "\\lnot": ["￢", ""],
+    "\\nabla": ["∇", ""],
+    "\\Re": ["ℜ", ""],
+    "\\unmodels": ["⊧", ""],
+    "\\unmp": ["∓", ""],
+    "\\unpm": ["±", ""],
+    "\\unvdash": ["⊢", ""],
 
-    "\\cos": "cos",
-    "\\cot": "cot",
-    "\\csc": "csc",
-    "\\cod": "cod",
-    "\\det": "det",
-    "\\diag": "diag",
-    "\\dom": "dom",
-    "\\ln": "ln",
-    "\\log": "log",
-    "\\rot": "rot",
-    "\\sec": "sec",
-    "\\sin": "sin",
-    "\\tan": "tan",
-    "\\tr": "tr"
+    "\\cos": ["cos", ""],
+    "\\cot": ["cot", ""],
+    "\\csc": ["csc", ""],
+    "\\cod": ["cod", ""],
+    "\\det": ["det", ""],
+    "\\diag": ["diag", ""],
+    "\\dom": ["dom", ""],
+    "\\ln": ["ln", ""],
+    "\\log": ["log", ""],
+    "\\rot": ["rot", ""],
+    "\\sec": ["sec", ""],
+    "\\sin": ["sin", ""],
+    "\\tan": ["tan", ""],
+    "\\tr": ["tr", ""]
   }
 
-  static bin_assoc_to_string: { [key: string]: string } = {
-    "+": "＋",
-    "~concat": "\ufeff", // "" is not good for if
-    "\\cap": "∩",
-    "\\cup": "∪",
-    "\\oplus": "⊕",
-    "\\otimes": "⊗",
-    "\\times": "×"
+  static bin_assoc_hash: { [key: string]: string[] } = {
+    "+": ["", "＋", ""],
+    "~concat": ["", "", ""], // "" is not good for if
+    "\\cap": ["", "∩", ""],
+    "\\cup": ["", "∪", ""],
+    "\\oplus": ["", "⊕", ""],
+    "\\otimes": ["", "⊗", ""],
+    "\\times": ["", "×", ""]
   }
 
-  static bin_other_to_string: { [key: string]: string } = {
-    "-": "－",
-    "/": "/",
-    "\\div": "÷",
-    "\\pm": "±",
-    "\\mp": "∓",
-    "\\setminus": "∖"
+  static bin_other_hash: { [key: string]: string[] } = {
+    "-": ["", "－", ""],
+    "/": ["<div class='fraction'><span>", "</span><hr class='fraction-line' /><span>", "</span></div>"],
+    "^": ["", "<sup>", "</sup>"],
+    "_": ["", "<sub>", "</sub>"],
+    "\\div": ["", "÷", ""],
+    "\\frac": ["<div class='fraction'><span>", "</span><hr class='fraction-line' /><span>", "</span></div>"],
+    "\\pm": ["", "±", ""],
+    "\\mp": ["", "∓", ""],
+    "\\setminus": ["", "∖", ""]
   }
 
-  static rel_to_string: { [key: string]: string } = {
-    "=": "＝",
-    "<": "＜",
-    ">": "＞",
-    "\\approx": "≈",
-    "\\dashv": "⊣",
-    "\\equiv": "≡",
-    "\\geq": "≥",
-    "\\gg": "≫",
-    "\\in": "∈",
-    "\\land": "∧",
-    "\\leftarrow": "←",
-    "\\leq": "≤",
-    "\\ll": "≪",
-    "\\lor": "∨",
-    "\\mapsto": "↦",
-    "\\models": "⊧",
-    "\\ni": "∋",
-    "\\perp": "⊥",
-    "\\prec": "≺",
-    "\\propto": "∝",
-    "\\rightarrow": "→",
-    "\\Rightarrow": "⇒",
-    "\\sim": "∼",
-    "\\simeq": "≃",
-    "\\subset": "⊂",
-    "\\subseteq": "⊆",
-    "\\succ": "≻",
-    "\\supset": "⊃",
-    "\\supseteq": "⊇",
-    "\\varsim": "∽",
-    "\\vdash": "⊢",
+  static rel_hash: { [key: string]: string[] } = {
+    "=": ["", "＝", ""],
+    "<": ["", "＜", ""],
+    ">": ["", "＞", ""],
+    "\\approx": ["", "≈", ""],
+    "\\dashv": ["", "⊣", ""],
+    "\\equiv": ["", "≡", ""],
+    "\\geq": ["", "≥", ""],
+    "\\gg": ["", "≫", ""],
+    "\\in": ["", "∈", ""],
+    "\\land": ["", "∧", ""],
+    "\\leftarrow": ["", "←", ""],
+    "\\leq": ["", "≤", ""],
+    "\\ll": ["", "≪", ""],
+    "\\lor": ["", "∨", ""],
+    "\\mapsto": ["", "↦", ""],
+    "\\models": ["", "⊧", ""],
+    "\\ni": ["", "∋", ""],
+    "\\perp": ["", "⊥", ""],
+    "\\prec": ["", "≺", ""],
+    "\\propto": ["", "∝", ""],
+    "\\rightarrow": ["", "→", ""],
+    "\\Rightarrow": ["", "⇒", ""],
+    "\\sim": ["", "∼", ""],
+    "\\simeq": ["", "≃", ""],
+    "\\subset": ["", "⊂", ""],
+    "\\subseteq": ["", "⊆", ""],
+    "\\succ": ["", "≻", ""],
+    "\\supset": ["", "⊃", ""],
+    "\\supseteq": ["", "⊇", ""],
+    "\\varsim": ["", "∽", ""],
+    "\\vdash": ["", "⊢", ""]
   }
 
 
   make_token_info(tok: string) {
-    if (TokenInfo.ord_letter_to_string[tok]) {
+    if (TokenInfo.ord_letter_hash[tok]) {
       this.token_type = Type.Ord;
       this.content = tok;
-    } else if (TokenInfo.ord_other_to_string[tok]) {
+    } else if (TokenInfo.ord_other_hash[tok]) {
       this.token_type = Type.Ord;
       this.content = tok;
-    } else if (TokenInfo.un_to_string[tok]) {
+    } else if (TokenInfo.un_hash[tok]) {
       this.token_type = Type.Un;
       this.content = tok;
-    } else if (TokenInfo.bin_assoc_to_string[tok]) {
-      this.token_type = Type.Bin;
+    } else if (TokenInfo.bin_assoc_hash[tok]) {
+      this.token_type = Type.BinAssoc;
       this.content = tok;
-    } else if (TokenInfo.bin_other_to_string[tok]) {
-      this.token_type = Type.Bin;
+    } else if (TokenInfo.bin_other_hash[tok]) {
+      this.token_type = Type.BinOther;
       this.content = tok;
-    } else if (TokenInfo.rel_to_string[tok]) {
+    } else if (TokenInfo.rel_hash[tok]) {
       this.token_type = Type.Rel;
       this.content = tok;
     } else {
@@ -230,22 +233,82 @@ class TokenInfo {
     return this;
   }
 }
-
+/*
 function content_to_string(tok: string): string {
-  if (TokenInfo.ord_letter_to_string[tok]) {
-    return "<span class='math_italic'>" + TokenInfo.ord_letter_to_string[tok] + "</span>";
-  } else if (TokenInfo.ord_other_to_string[tok]) {
-    return TokenInfo.ord_other_to_string[tok];
-  } else if (TokenInfo.un_to_string[tok]) {
-    return TokenInfo.un_to_string[tok];
-  } else if (TokenInfo.bin_assoc_to_string[tok]) {
-    return TokenInfo.bin_assoc_to_string[tok];
-  } else if (TokenInfo.bin_other_to_string[tok]) {
-    return TokenInfo.bin_other_to_string[tok];
-  } else if (TokenInfo.rel_to_string[tok]) {
-    return " " + TokenInfo.rel_to_string[tok] + " ";
+  if (TokenInfo.ord_letter_hash[tok]) {
+    return "<span class='math_italic'>" + TokenInfo.ord_letter_hash[tok] + "</span>";
+  } else if (TokenInfo.ord_other_hash[tok]) {
+    return TokenInfo.ord_other_hash[tok];
+  } else if (TokenInfo.un_hash[tok]) {
+    return TokenInfo.un_hash[tok];
+  } else if (TokenInfo.bin_assoc_hash[tok]) {
+    return TokenInfo.bin_assoc_hash[tok];
+  } else if (TokenInfo.bin_other_hash[tok]) {
+    return TokenInfo.bin_other_hash[tok];
+  } else if (TokenInfo.rel_hash[tok]) {
+    return " " + TokenInfo.rel_hash[tok] + " ";
   } else {
     console.log("[GFN]: '" + tok + "' does not match any def.");//<<test>>
     return "";
+  }
+}
+*/
+
+
+function content_ord_to_string(tok: string) {
+  var hash_value: Array<string>;
+
+  if (TokenInfo.ord_letter_hash[tok]) {
+    hash_value = TokenInfo.ord_letter_hash[tok];
+    return "<span class='math-italic'>" + hash_value[0] + "</span>";
+  } else if (TokenInfo.ord_other_hash[tok]) {
+    hash_value = TokenInfo.ord_other_hash[tok];
+    return hash_value[0];
+  } else {
+    return "**ERR: ord**";//<<test>>
+  }
+}
+
+function content_un_to_string(tok: string, mt: MainTree, itms: Tree[]) {
+  var hash_value: Array<string>;
+
+  if (TokenInfo.un_hash[tok]) {
+    hash_value = TokenInfo.un_hash[tok];
+    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1];
+  } else {
+    return "**ERR: un**";//<<test>>
+  }
+}
+
+function content_bin_assoc_to_string(tok: string, mt: MainTree, itms: Tree[]) {
+  var hash_value: Array<string>;
+
+  if (TokenInfo.bin_assoc_hash[tok]) {
+    hash_value = TokenInfo.bin_assoc_hash[tok];
+    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
+  } else {
+    return "**ERR: bin_assoc**";//<<test>>
+  }
+}
+
+function content_bin_other_to_string(tok: string, mt: MainTree, itms: Tree[]) {
+  var hash_value: Array<string>;
+
+  if (TokenInfo.bin_other_hash[tok]) {
+    hash_value = TokenInfo.bin_other_hash[tok];
+    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
+  } else {
+    return "**ERR: bin_other**";//<<test>>
+  }
+}
+
+function content_rel_to_string(tok: string, mt: MainTree, itms: Tree[]) {
+  var hash_value: Array<string>;
+
+  if (TokenInfo.rel_hash[tok]) {
+    hash_value = TokenInfo.rel_hash[tok];
+    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
+  } else {
+    return "**ERR: bin_other**";//<<test>>
   }
 }
