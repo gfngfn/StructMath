@@ -66,7 +66,7 @@ function react_to_input(e: KeyboardEvent): void {
   var temp_tree: Tree;
 
   //disable default reaction by browsers
-  //e.preventDefault();
+  e.preventDefault();
 
   key_info = keycode_to_key_info(e);
 
@@ -206,7 +206,7 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
   kcode = e.keyCode;
   kshift = e.shiftKey;
 
-  console.log("(" + kcode + ", " + kshift + ")");//<<test>>
+  //console.log("(" + kcode + ", " + kshift + ")");//<<test>>
 
   cat = KeyCategory.Letter;
   cont = null;
