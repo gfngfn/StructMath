@@ -2,6 +2,7 @@
 
 enum InputState { Single, Sequence }
 enum SendingState { Normal, Exchange, InsertLeft }
+enum ViewMode { Layered, Plain }
 
 class UserInput {
   stock: string;
@@ -28,6 +29,7 @@ enum KeyCategory {
   Letter,
   Exchange,
   InsertLeft,
+  ChangeViewMode,
   Invalid
 }
 
@@ -54,6 +56,7 @@ var KEYCODE_DELETE = 46;
 var KEYCODE_ENTER = 13;
 var KEYCODE_EXCHANGE = 113;//[F2]
 var KEYCODE_INSERTLEFT = 115;//[F4]
+var KEYCODE_CHANGEVIEWMODE = 120;//[F9]
 
 var user_input: UserInput = new UserInput();
 var token_info: TokenInfo = new TokenInfo();
@@ -88,6 +91,15 @@ function react_to_input(e: KeyboardEvent): void {
         } else {
           user_input.sending = SendingState.InsertLeft;
           main_tree.log_status("[insert-left mode]");
+        }
+        break;
+      case KeyCategory.ChangeViewMode:
+        if (main_view_mode == ViewMode.Layered) {
+          main_view_mode = ViewMode.Plain;
+          main_tree.log_status("(plain view mode)");
+        } else {
+          main_view_mode = ViewMode.Layered;
+          main_tree.log_status("(layered view mode)");
         }
         break;
       case KeyCategory.SequencePrefix:
@@ -194,7 +206,7 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
   kcode = e.keyCode;
   kshift = e.shiftKey;
 
-  //console.log("(" + kcode + ", " + kshift + ")");//<<test>>
+  console.log("(" + kcode + ", " + kshift + ")");//<<test>>
 
   cat = KeyCategory.Letter;
   cont = null;
@@ -228,6 +240,9 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
         break;
       case KEYCODE_INSERTLEFT:
         cat = KeyCategory.InsertLeft;
+        break;
+      case KEYCODE_CHANGEVIEWMODE:
+        cat = KeyCategory.ChangeViewMode;
         break;
       case KEYCODE_SHIFT:
       case KEYCODE_CTRL:

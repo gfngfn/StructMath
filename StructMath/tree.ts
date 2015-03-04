@@ -61,7 +61,13 @@ class Tree {
           }
         }
       } else {
-        res = "<span class='empty-box-of-tree'>|</span>";
+        switch (main_view_mode) {
+          case ViewMode.Layered:
+            res = "<span class='empty-box-of-tree'>|</span>";
+            break;
+          case ViewMode.Plain:
+            res = "<span class='empty-box-plain'>|</span>";
+        }
       }
       //if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
 
@@ -84,7 +90,14 @@ class Tree {
             break;
         }
       } else {
-        res += "<div class='box-of-tree'>";
+        switch (main_view_mode) {
+          case ViewMode.Layered:
+            res += "<div class='box-of-tree'>";
+            break;
+          case ViewMode.Plain:
+            res += "<div class='box-plain'>";
+            break;
+        }
       }
       switch (this.token_type) {
         case Type.Ord:

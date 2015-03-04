@@ -135,6 +135,26 @@ div.target-of-tree-insert-left {
   margin-right: 1pt;
 }
 
+div.box-plain {
+  display: inline-block;
+  padding-left: 2pt;
+  padding-right: 2pt;
+  padding-top: 0pt;
+  padding-bottom: 0pt;
+  background-color: #dddddd;
+  border-width: 0pt;
+  margin: 0.5pt;
+}
+
+.empty-box-plain {
+  display: inline-block;
+  color: #ffffff;
+  padding: 0pt;
+  background-color: #ffffff;
+  border-width: 0pt;
+  margin: 0pt;
+}
+
 .sequence {
   color: #111111;
   font-family: 'Consolas';
