@@ -151,15 +151,29 @@ div.target-of-tree-insert-left {
   font-style: italic;
 }
 
-.fraction {
+div.fraction {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
 }
 
-.fraction-line {
+hr.fraction-line {
   color: #111111;
   padding: 0pt;
   margin: 0pt;
+  border-width: 1pt;
+  border-style: solid;
+}
+
+div.square-root {
+  display: inline-block;
+}
+
+hr.square-root-line {
+  color: #111111;
+  padding: 0pt;
+  margin: 0pt;
+  margin-top: 2pt;
+  border-width: 1pt;
   border-style: solid;
 }

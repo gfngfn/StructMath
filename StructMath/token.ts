@@ -116,9 +116,10 @@ class TokenInfo {
     "8": ["8"],
     "9": ["9"],
     "0": ["0"],
-    "\\bot": ["⊥"],
+    "\\bot": ["⟘"],
     "\\emptyset": ["∅"],
-    "\\infty": ["∞"]
+    "\\infty": ["∞"],
+    "\\top": ["⟙"]
   }
 
   static un_hash: { [key: string]: string[] } = {
@@ -145,13 +146,14 @@ class TokenInfo {
     "\\rot": ["rot", ""],
     "\\sec": ["sec", ""],
     "\\sin": ["sin", ""],
+    "\\sqrt": ["√<div class='square-root'><hr class='square-root-line'/><span>", "</span></div>"],
     "\\tan": ["tan", ""],
     "\\tr": ["tr", ""]
   }
 
   static bin_assoc_hash: { [key: string]: string[] } = {
     "+": ["", "＋", ""],
-    "~concat": ["", "", ""], // "" is not good for if
+    "~concat": ["", "", ""],
     "\\cap": ["", "∩", ""],
     "\\cup": ["", "∪", ""],
     "\\oplus": ["", "⊕", ""],
@@ -168,7 +170,10 @@ class TokenInfo {
     "\\frac": ["<div class='fraction'><span>", "</span><hr class='fraction-line' /><span>", "</span></div>"],
     "\\pm": ["", "±", ""],
     "\\mp": ["", "∓", ""],
-    "\\setminus": ["", "∖", ""]
+    "\\setminus": ["", "∖", ""],
+
+    "\\dif": ["<div class='fraction'><span>d", "</span><hr class='fraction-line' /><span>d", "</span></div>"],
+    "\\pdif": ["<div class='fraction'><span>∂", "</span><hr class='fraction-line' /><span>∂", "</span></div>"]
   }
 
   static rel_hash: { [key: string]: string[] } = {
@@ -233,27 +238,6 @@ class TokenInfo {
     return this;
   }
 }
-/*
-function content_to_string(tok: string): string {
-  if (TokenInfo.ord_letter_hash[tok]) {
-    return "<span class='math_italic'>" + TokenInfo.ord_letter_hash[tok] + "</span>";
-  } else if (TokenInfo.ord_other_hash[tok]) {
-    return TokenInfo.ord_other_hash[tok];
-  } else if (TokenInfo.un_hash[tok]) {
-    return TokenInfo.un_hash[tok];
-  } else if (TokenInfo.bin_assoc_hash[tok]) {
-    return TokenInfo.bin_assoc_hash[tok];
-  } else if (TokenInfo.bin_other_hash[tok]) {
-    return TokenInfo.bin_other_hash[tok];
-  } else if (TokenInfo.rel_hash[tok]) {
-    return " " + TokenInfo.rel_hash[tok] + " ";
-  } else {
-    console.log("[GFN]: '" + tok + "' does not match any def.");//<<test>>
-    return "";
-  }
-}
-*/
-
 
 function content_ord_to_string(tok: string) {
   var hash_value: Array<string>;
@@ -282,10 +266,19 @@ function content_un_to_string(tok: string, mt: MainTree, itms: Tree[]) {
 
 function content_bin_assoc_to_string(tok: string, mt: MainTree, itms: Tree[]) {
   var hash_value: Array<string>;
+  var res: string;
+  var i: number;
 
   if (TokenInfo.bin_assoc_hash[tok]) {
     hash_value = TokenInfo.bin_assoc_hash[tok];
-    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
+    res = hash_value[0];
+    res += itms[0].tree_to_innerhtml(mt);
+    for (i = 1; i < itms.length; i++) {
+      res += hash_value[1]
+      res += itms[i].tree_to_innerhtml(mt);
+    }
+    res += hash_value[2];
+    return res;
   } else {
     return "**ERR: bin_assoc**";//<<test>>
   }
@@ -309,6 +302,6 @@ function content_rel_to_string(tok: string, mt: MainTree, itms: Tree[]) {
     hash_value = TokenInfo.rel_hash[tok];
     return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
   } else {
-    return "**ERR: bin_other**";//<<test>>
+    return "**ERR: rel**";//<<test>>
   }
 }

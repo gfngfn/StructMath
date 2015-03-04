@@ -63,7 +63,7 @@ class Tree {
       } else {
         res = "<span class='empty-box-of-tree'>|</span>";
       }
-      if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
+      //if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
 
     } else {
 
@@ -105,20 +105,16 @@ class Tree {
           }
           break;
         case Type.BinOther:
-          //res += this.items[0].tree_to_innerhtml(mt);
           res += content_bin_other_to_string(this.content, mt, this.items);
           if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
             res += "<span class='sequence'>" + user_input.stock + "</span>";
           }
-          //res += this.items[1].tree_to_innerhtml(mt);
           break;
         case Type.Rel:
-          //res += this.items[0].tree_to_innerhtml(mt);
           res += content_rel_to_string(this.content, mt, this.items);
           if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Exchange) {
             res += "<span class='sequence'>" + user_input.stock + "</span>";
           }
-          //res += this.items[1].tree_to_innerhtml(mt);
           break;
         default:
           console.log("[GFN] other Type.");//<<test>>
@@ -128,7 +124,7 @@ class Tree {
       if (this == mt.target && user_input.state == InputState.Sequence && user_input.sending == SendingState.Normal) {
         res += "<span class='sequence'>" + user_input.stock + "</span>";
       }
-      if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
+      //if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
     }
     return res;
   }
@@ -155,6 +151,42 @@ class Tree {
     return;
   }
 
+  // make BinAssocs associate
+  sophisticate(): void {
+    var i: number;
+    var j: number;
+
+    if (this.token_type == Type.BinAssoc) {
+
+      for (i = 0; i < this.items.length; i++) {
+        if (this.items[i].content == this.content) {
+          if (i >= 1) {
+            this.items[i].items[0].left_sibling = this.items[i - 1];
+            this.items[i - 1].right_sibling = this.items[i].items[0];
+          }
+          if (i <= this.items.length - 2) {
+            this.items[i].items[this.items[i].items.length - 1].right_sibling = this.items[i + 1];
+            this.items[i + 1].left_sibling = this.items[i].items[this.items[i].items.length - 1];
+          }
+          for (j = 0; j < this.items[i].items.length; j++) {
+            this.items[i].items[j].parent = this;
+            this.items.splice(i + 1 + j, 0, this.items[i].items[j]);
+          }
+          this.items.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    if (this.token_type == Type.Empty || this.token_type == Type.Ord) {
+      return;
+    } else {
+      for (i = 0; i < this.items.length; i++) {
+        this.items[i].sophisticate();
+      }
+      return;
+    }
+  }
 }
 
 function copy_tree(newtr: Tree, oldtr: Tree): void {
@@ -258,19 +290,75 @@ class MainTree extends Tree {
 
   // delete content of target
   press_backspace(): void {
+    var prnt: Tree;
+
+    prnt = this.target.parent;
+
     if (this.target.token_type != Type.Empty) {
       this.target.delete_to_empty();
-    } else {
-      if (this.target.parent != null) {
-        if (this.target.parent.items.length == 1) {
-          this.target = this.target.parent;
-          this.target.delete_to_empty();
-        } else if (this.target.parent.items.length == 2) {
-          this.target = this.target.parent;
-          copy_tree(this.target, this.target.items[0]);
+      if (prnt != null) {
+        if (prnt.content == "~concat") {
+          this.splice_item();
         }
       }
+    } else {
+      if (prnt != null) {
+        this.splice_item();
+      }
     }
+
+    return;
+  }
+
+  splice_item() {
+    var prnt: Tree;
+    var i: number;
+
+    prnt = this.target.parent;
+
+    if (prnt.items.length == 1) {
+
+      this.target = prnt;
+      this.target.delete_to_empty();
+
+    } else if (prnt.items.length == 2) {
+
+      if (prnt.items[0] == this.target) {
+        this.target = prnt;
+        copy_tree(this.target, this.target.items[1]);
+      } else {
+        this.target = prnt;
+        copy_tree(this.target, this.target.items[0]);
+      }
+
+    } else {
+      // if prnt have more than 2 items
+
+      for (i = 0; i < prnt.items.length; i++) {
+        if (prnt.items[i] == this.target) {
+          if (i >= 1) {
+            if (i <= prnt.items.length - 2) {
+              prnt.items[i - 1].right_sibling = prnt.items[i + 1];
+              prnt.items[i + 1].left_sibling = prnt.items[i - 1];
+            } else {
+              prnt.items[i - 1].right_sibling = null;
+            }
+          } else {
+            prnt.items[i + 1].left_sibling = null;
+          }
+          prnt.items.splice(i, 1);
+          if (i >= 1) {
+            this.target = prnt.items[i - 1];
+          } else {
+            this.target = prnt.items[0];
+          }
+          break;
+        }
+      }
+
+    }
+
+    return;
   }
 
   // process of addition of new node
@@ -339,6 +427,9 @@ class MainTree extends Tree {
           this.target.content = "~concat";
           this.target.add_child(lc);
           this.target.add_child(rc);
+
+          this.target = rc; // specification changed
+
           break;
         case Type.Un:
           lc = new Tree(Type.Empty, null);

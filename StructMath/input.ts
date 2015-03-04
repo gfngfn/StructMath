@@ -180,6 +180,7 @@ function react_to_input(e: KeyboardEvent): void {
   }
 
   // renew display
+  main_tree.sophisticate();
   main_element.innerHTML = main_tree.main_tree_to_innerhtml();
   return;
 }
