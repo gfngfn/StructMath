@@ -1,4 +1,5 @@
 ///<reference path="token.ts" />
+///<reference path="Scripts/typings/jquery/jquery.d.ts" />
 
 enum Type {
   Empty,
@@ -38,35 +39,35 @@ class Tree {
         if (user_input.state != InputState.Sequence) {
           switch (user_input.sending) {
             case SendingState.Normal:
-              res = "<span class='empty-target-of-tree'>|</span>";
+              res = "<div class='empty-target-of-tree'>|</div>";
               break;
             case SendingState.Exchange:
-              res = "<span class='empty-target-of-tree-exchange'>|</span>";
+              res = "<div class='empty-target-of-tree-exchange'>|</div>";
               break;
             case SendingState.InsertLeft:
-              res = "<span class='empty-target-of-tree-insert-left'>|</span>";
+              res = "<div class='empty-target-of-tree-insert-left'>|</div>";
               break;
           }
         } else {
           switch (user_input.sending) {
             case SendingState.Normal:
-              res = "<span class='empty-target-of-tree'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              res = "<div class='empty-target-of-tree'>|<div class= 'sequence'>" + user_input.stock + "</div>|</div>";
               break;
             case SendingState.Exchange:
-              res = "<span class='empty-target-of-tree-exchange'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              res = "<div class='empty-target-of-tree-exchange'>|<div class= 'sequence'>" + user_input.stock + "</div>|</div>";
               break;
             case SendingState.InsertLeft:
-              res = "<span class='empty-target-of-tree-insert-left'>|<span class= 'sequence'>" + user_input.stock + "</span>|</span>";
+              res = "<div class='empty-target-of-tree-insert-left'>|<div class= 'sequence'>" + user_input.stock + "</div>|</div>";
               break;
           }
         }
       } else {
         switch (main_view_mode) {
           case ViewMode.Layered:
-            res = "<span class='empty-box-of-tree'>|</span>";
+            res = "<div class='empty-box-of-tree'>|</div>";
             break;
           case ViewMode.Plain:
-            res = "<span class='empty-box-plain'>|</span>";
+            res = "<div class='empty-box-plain'>|</div>";
         }
       }
       //if (this.parent != null) { if (this.parent.items[0] != this && this.parent.items[1] != this) { res += "*"; } }//<<test>>
@@ -374,7 +375,7 @@ class MainTree extends Tree {
     return;
   }
 
-  // process of addition of new node
+  // process of adding new node
   send(ti: TokenInfo): void {
     var lc: Tree;
     var rc: Tree;

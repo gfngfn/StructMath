@@ -135,19 +135,26 @@ class TokenInfo {
     "\\unvdash": ["⊢", ""],
 
     "\\cos": ["cos", ""],
+    "\\cosh": ["cosh", ""],
     "\\cot": ["cot", ""],
     "\\csc": ["csc", ""],
     "\\cod": ["cod", ""],
     "\\det": ["det", ""],
     "\\diag": ["diag", ""],
     "\\dom": ["dom", ""],
+    "\\exp": ["exp", ""],
+    "\\inf": ["inf", ""],
     "\\ln": ["ln", ""],
     "\\log": ["log", ""],
+    "\\mndtparen": ["<div class='mandatory-paren'>", "</div>"],
     "\\rot": ["rot", ""],
     "\\sec": ["sec", ""],
     "\\sin": ["sin", ""],
-    "\\sqrt": ["√<div class='square-root'><hr class='square-root-line'/><span>", "</span></div>"],
+    "\\sinh": ["sinh", ""],
+    "\\sqrt": ["<div class='square-root'>", "</div>"],
+    "\\sup": ["sup", ""],
     "\\tan": ["tan", ""],
+    "\\tanh": ["tanh", ""],
     "\\tr": ["tr", ""]
   }
 

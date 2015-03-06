@@ -137,11 +137,8 @@ div.target-of-tree-insert-left {
 
 div.box-plain {
   display: inline-block;
-  padding-left: 2pt;
-  padding-right: 2pt;
-  padding-top: 0pt;
-  padding-bottom: 0pt;
-  background-color: #dddddd;
+  padding: 0pt;
+  background-color: none;
   border-width: 0pt;
   margin: 0.5pt;
 }
@@ -151,11 +148,13 @@ div.box-plain {
   color: #ffffff;
   padding: 0pt;
   background-color: #ffffff;
-  border-width: 0pt;
+  border-width: 1pt;
+  border-color: #444444;
   margin: 0pt;
 }
 
 .sequence {
+  display: inline-block;
   color: #111111;
   font-family: 'Consolas';
   font-size: 12pt;
@@ -187,13 +186,19 @@ hr.fraction-line {
 
 div.square-root {
   display: inline-block;
-}
-
-hr.square-root-line {
-  color: #111111;
   padding: 0pt;
   margin: 0pt;
-  margin-top: 2pt;
-  border-width: 1pt;
+  border-width: 0pt;
+  border-top: 2pt;
+  border-color: #111111;
   border-style: solid;
 }
+
+div.mandatory-paren {
+  display: inline-block;
+  padding: 0pt;
+  margin: 0pt;
+  border-width: 0pt;
+}
+
+img { vertical-align: top; }

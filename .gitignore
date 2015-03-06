@@ -1,4 +1,5 @@
 test/
+test_svg/
 StructMath/bin/
 StructMath/obj/
 StructMath/app.js
@@ -9,3 +10,5 @@ StructMath/input.js
 StructMath/input.js.map
 StructMath/token.js
 StructMath/token.js.map
+StructMath/glyph.js
+StructMath/glyph.js.map
