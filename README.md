@@ -24,7 +24,7 @@ The target of input is displayed as not an ordinary cursor but a red box.
 Open `index.html`, and you can input mathematical formulae.
 
 * Latin letters and some symbols: literally input
-* [\]: begin to input a control sequence
+* [\\]: begin to input a control sequence
 * [←]: move target to left or lower layer
 * [→]: move target to right or upper layer
 * [Shift]+[←]: move target to left sibling

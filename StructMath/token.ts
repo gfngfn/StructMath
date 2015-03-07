@@ -146,7 +146,7 @@ class TokenInfo {
     "\\inf": ["inf", ""],
     "\\ln": ["ln", ""],
     "\\log": ["log", ""],
-    "\\mndtparen": ["<div class='mandatory-paren'>", "</div>"],
+    "\\mndtparen": ["<div class='mandatory-paren'><div>", "</div></div>"],
     "\\rot": ["rot", ""],
     "\\sec": ["sec", ""],
     "\\sin": ["sin", ""],
@@ -160,12 +160,13 @@ class TokenInfo {
 
   static bin_assoc_hash: { [key: string]: string[] } = {
     "+": ["", "＋", ""],
+    ",": ["<div class='mandatory-paren'><div>", ", ", "</div></div>"],
     "~concat": ["", "", ""],
     "\\cap": ["", "∩", ""],
     "\\cup": ["", "∪", ""],
     "\\oplus": ["", "⊕", ""],
     "\\otimes": ["", "⊗", ""],
-    "\\times": ["", "×", ""]
+    "\\times": ["", "×", ""],
   }
 
   static bin_other_hash: { [key: string]: string[] } = {
@@ -216,7 +217,13 @@ class TokenInfo {
     "\\varsim": ["", "∽", ""],
     "\\vdash": ["", "⊢", ""]
   }
-
+/*
+  static gen_hash: { [key: string]: string[] } = {
+    "\\existsin": ["∃", "∈", ". ", ""],
+    "\\forallin": ["∀", "∈", ". ", ""],
+    "\\funcdoms": ["", ": ", "→", ""]
+  }
+*/
 
   make_token_info(tok: string) {
     if (TokenInfo.ord_letter_hash[tok]) {
@@ -307,7 +314,7 @@ function content_rel_to_string(tok: string, mt: MainTree, itms: Tree[]) {
 
   if (TokenInfo.rel_hash[tok]) {
     hash_value = TokenInfo.rel_hash[tok];
-    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + hash_value[1] + itms[1].tree_to_innerhtml(mt) + hash_value[2];
+    return hash_value[0] + itms[0].tree_to_innerhtml(mt) + " " + hash_value[1] + " " + itms[1].tree_to_innerhtml(mt) + hash_value[2];
   } else {
     return "**ERR: rel**";//<<test>>
   }

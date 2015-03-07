@@ -18,6 +18,7 @@
   <div id="status" class="status-box">status</div>
     <p>
       木構造化された数式エディタのプロトタイプです。
+      現状，Google Chrome最新版（41.0.…）が最も正常な動作を期待できます。Firefoxでは一部キー入力を受け付けません。
       カーソルではなく赤枠で入力対象位置が表示されます。
       主要操作は以下の通りです：
     </p>
@@ -31,6 +32,7 @@
       <li><kbd>[Enter]</kbd>：赤枠を内の階層の最も右へ移動させる・制御綴の入力の終了</li>
       <li><kbd>[F2]</kbd>：交換モードに入る・出る</li>
       <li><kbd>[F4]</kbd>：左向き挿入モードに入る・出る</li>
+      <li><kbd>[F9]</kbd>：表示モード（層状／プレーン）を切り替える</li>
     </ul>
     <p>
       普通にテキストとして打つ感覚に似せるように，前から順に入力しやすいような挙動をします。
@@ -41,7 +43,7 @@
       <li><kbd>a+b[←]\times␣c</kbd></li>
       <li><kbd>a+b[BS][BS]\times␣c</kbd></li>
       <li><kbd>A\in␣U␣\land␣B\in␣U␣␣\Rightarrow␣A\cap␣B␣\in␣U</kbd></li>
-      <li><kbd>A\oplus␣B␣[F2]\otimes␣</kbd></li>
+      <li><kbd>A-B␣[F2]\setminus␣</kbd></li>
       <li><kbd>ma[F4]=F</kbd></li>
       <li><kbd>\theta␣[F4]\sin␣\cos␣\theta␣</kbd></li>
     </ul>
