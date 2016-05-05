@@ -301,6 +301,4 @@ function keycode_to_key_info(e: KeyboardEvent): KeyInfo {
 
 if (document.addEventListener) {
   document.addEventListener("keydown", react_to_input);
-} else if (document.attachEvent) {
-  document.attachEvent("onkeydown", react_to_input);
 }
