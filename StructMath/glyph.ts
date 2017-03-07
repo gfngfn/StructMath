@@ -1,4 +1,6 @@
 ﻿
+var $ = jQuery;
+
 function draw_special_glyphs(): void {
   var elms: JQuery;
   var i: number;
